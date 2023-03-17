@@ -1,9 +1,11 @@
 ﻿namespace Caarro.Data;
 
-public class Vehicle
+public class Vehicle : BaseEntity
 {
-    public int Id { get; set; }
-    public string ParitionKey { get; set; }
+    public override int Id { get; set; }
+    public override string PartitionKey { get; set; }
+    public override DateTime Date { get; set; }
+    public override TimeZoneInfo Timezone { get; set; }
     public string Name { get; set; }
     public string? Manufacturer { get; set; }
     public string? Model { get; set; }
@@ -14,7 +16,6 @@ public class Vehicle
     public decimal FuelCapacity { get; set; }
     public string? FuelType { get; set; }
     public UnitOfMeasure UnitOfMeasure { get; set; }
-    public uint Distence { get; set; }
 }
 
 public enum UnitOfMeasure
