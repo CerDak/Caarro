@@ -3,7 +3,7 @@ namespace Caarro.Data;
 public class Expense : BaseEntity
 {
     public override int Id { get; set; }
-    public override string PartitionKey { get; set; }
+
     public override DateTime Date { get; set; }
     public override TimeZoneInfo Timezone { get; set; }
     public uint Odometer { get; set; }
