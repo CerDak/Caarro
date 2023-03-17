@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-Caarro-448C9957-2806-499F-A754-2B80B0B046EE</UserSecretsId>
+        <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.4" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.32.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="7.0.4" />
+        <PackageReference Include="Microsoft.Identity.Web" Version="1.16.0" />
+        <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.16.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>
