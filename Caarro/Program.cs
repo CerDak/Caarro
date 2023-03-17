@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore.Cosmos;
+using Microsoft.EntityFrameworkCore.Sqlite;
 using Caarro.Data;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,10 +32,16 @@ builder.Services.AddScoped<VehicleService>();
 
 builder.Services.AddDbContext<CaarroDbContext>(db =>
 {
-    db.UseCosmos(builder.Configuration.GetConnectionString("Cosmos"), databaseName: "caarro");
+    db.UseSqlite("Data Source=caarro.db");
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CaarroDbContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

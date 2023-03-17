@@ -4,5 +4,4 @@ public abstract class BaseEntity
 {
     public abstract int Id { get; set; }
     public abstract DateTime Date { get; set; }
-    public abstract TimeZoneInfo Timezone { get; set; }
 }
