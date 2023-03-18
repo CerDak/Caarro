@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Caarro.Data;
 using Caarro.Service;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,12 +14,14 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 builder.Services.AddControllersWithViews()
     .AddMicrosoftIdentityUI();
-
 builder.Services.AddAuthorization(options =>
 {
     // By default, all incoming requests will be authorized according to the default policy
     options.FallbackPolicy = options.DefaultPolicy;
 });
+
+builder.Services.AddHealthChecks()
+    .AddSqlite(builder.Configuration.GetConnectionString("Sqlite")!);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
@@ -27,7 +30,7 @@ builder.Services.AddScoped<VehicleService>();
 
 builder.Services.AddDbContext<CaarroDbContext>(db =>
 {
-    db.UseSqlite("Data Source=caarro.db");
+    db.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
 });
 
 var app = builder.Build();
@@ -51,6 +54,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.MapHealthChecks("/healthz", new HealthCheckOptions
+{
+    AllowCachingResponses = false,
+});
 
 app.MapControllers();
 app.MapBlazorHub();
