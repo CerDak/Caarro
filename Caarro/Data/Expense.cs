@@ -6,7 +6,7 @@ public class Expense : BaseEntity
 
     public override DateTime Date { get; set; }
     public uint Odometer { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public string? Location { get; set; }
     public string? Driver { get; set; }
     public string? PaymentMethod { get; set; }

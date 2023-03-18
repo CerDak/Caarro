@@ -1,6 +1,43 @@
 @page "/NewCar"
-<h3>NewCar</h3>
+@using Caarro.Data
+@using Caarro.Service
+@using Microsoft.Extensions.Logging
+@inject VehicleService _vehicleService
+@inject ILogger<NewCar> _log
+
+<PageTitle>New Car</PageTitle>
+<h1>New Car</h1>
+
+<EditForm Model="@_vehicle" OnSubmit="@SubmitNewVehicle">
+    <InputText id="name" placeholder="Name" @bind-Value="_vehicle.Name"/>
+    <InputText id="manufacturer" placeholder="Manufacturer" @bind-Value="_vehicle.Manufacturer"/>
+    <InputText id="model" placeholder="Model" @bind-Value="_vehicle.Model"/>
+    <InputText id="licensePlate" placeholder="License Plate Number" @bind-Value="_vehicle.LicensePlate"/>
+    <InputText id="vin" placeholder="VIN" @bind-Value="_vehicle.VehicleIdentificationNumber"/>
+    <InputNumber id="year" placeholder="Model Year" @bind-Value="_vehicle.Year"/>
+    <InputNumber id="fuelCapacity" placeholder="Fuel Capacity" @bind-Value="_vehicle.FuelCapacity"/>
+    <InputSelect id="fuelType" placeholder="Fuel Type" @bind-Value="_vehicle.FuelType">
+        @foreach (var fuel in Enum.GetValues(typeof(FuelType)))
+        {
+            <option value="@fuel">@fuel</option>
+        }
+    </InputSelect>
+    <InputSelect id="unitOfMeasure" placeholder="Miles/Kilometers" @bind-Value="_vehicle.UnitOfMeasure">
+        @foreach (var unit in Enum.GetValues(typeof(UnitOfMeasure)))
+        {
+            <option value="@unit">@unit</option>
+        }
+    </InputSelect>
+
+    <button type="submit">Submit</button>
+</EditForm>
 
 @code {
-    
+    private Vehicle _vehicle = new();
+
+    private async Task SubmitNewVehicle()
+    {
+        _log.LogInformation("Adding new car {name}", _vehicle.Name);
+        await _vehicleService.AddVehicle(_vehicle);
+    }
 }

@@ -1,9 +1,49 @@
 ﻿@page "/"
+@using Caarro.Service
+@using Caarro.Data
+@inject NavigationManager _NavigationManager
+@inject VehicleService _VehicleService
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Caarro</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Your Cars</h1>
 
-Welcome to your new app.
+<p>This shows cars</p>
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+@if (_vehicles is null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Manufacturer</th>
+            <th>Model</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var vehicle in _vehicles)
+        {
+            <tr>
+                <td><a href="/Car/@vehicle.Id">@vehicle.Name</a></td>
+                <td>@vehicle.Manufacturer</td>
+                <td>@vehicle.Model</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Vehicle>? _vehicles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _vehicles = await _VehicleService.GetAllVehicles();
+    }
+}

@@ -1,6 +1,53 @@
-@page "/Car"
-<h3>Car</h3>
+@page "/Car/{CarId:int}"
+@using Caarro.Data
+@using Caarro.Service
+@using Microsoft.Extensions.Logging
+@inject NavigationManager _NavigationManager
+@inject VehicleService _VehicleService
+@inject ILogger<NewCar> _Log
+
+@if (_vehicle is null)
+{
+    <p>
+        <em>Not found.</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Manufacturer</th>
+            <th>Model</th>
+            <th>Fuel Capacity</th>
+            <th>Fuel Type</th>
+            <th>Added On</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@_vehicle.Name</td>
+                <td>@_vehicle.Year</td>
+                <td>@(_vehicle.Manufacturer ?? "Unknown")</td>
+                <td>@(_vehicle.Model ?? "Unknown")</td>
+                <td>@_vehicle.FuelCapacity</td>
+                <td>@_vehicle.FuelType</td>
+                <td>@_vehicle.Date</td>
+            </tr>
+        </tbody>
+    </table>
+}
 
 @code {
+    [Parameter]
+    public int CarId { get; set; }
+
+    private Vehicle? _vehicle;
     
+    protected override async Task OnInitializedAsync()
+    {
+        _vehicle = await _VehicleService.GetVehicle(CarId);
+    }
 }

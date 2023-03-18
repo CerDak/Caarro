@@ -8,18 +8,18 @@ public class Vehicle : BaseEntity
     public string? Manufacturer { get; set; }
     public string? Model { get; set; }
     public string? LicensePlate { get; set; }
-    public uint Year { get; set; }
+    public int Year { get; set; }
     public string? VehicleIdentificationNumber { get; set; }
     public bool Active { get; set; }
     public double FuelCapacity { get; set; }
     public FuelType FuelType { get; set; }
     public UnitOfMeasure UnitOfMeasure { get; set; }
     
-    public ICollection<Reminder> Reminders { get; set; }
-    public ICollection<Service> Services { get; set; }
-    public ICollection<Refueling> Refuelings { get; set; }
-    public ICollection<Expense> Expenses { get; set; }
-    public ICollection<Income> Income { get; set; }
+    public ICollection<Reminder>? Reminders { get; set; }
+    public ICollection<Service>? Services { get; set; }
+    public ICollection<Refueling>? Refuelings { get; set; }
+    public ICollection<Expense>? Expenses { get; set; }
+    public ICollection<Income>? Income { get; set; }
 }
 
 public enum UnitOfMeasure
@@ -30,6 +30,7 @@ public enum UnitOfMeasure
 
 public enum FuelType
 {
+    Unknown,
     Gas85,
     Gas86,
     Gas87,
