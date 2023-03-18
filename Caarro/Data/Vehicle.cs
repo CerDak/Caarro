@@ -4,14 +4,14 @@ public class Vehicle : BaseEntity
 {
     public override int Id { get; set; }
     public override DateTime Date { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public string? Manufacturer { get; set; }
     public string? Model { get; set; }
     public string? LicensePlate { get; set; }
-    public int Year { get; set; }
+    public int? Year { get; set; }
     public string? VehicleIdentificationNumber { get; set; }
     public bool Active { get; set; }
-    public double FuelCapacity { get; set; }
+    public double? FuelCapacity { get; set; }
     public FuelType FuelType { get; set; }
     public UnitOfMeasure UnitOfMeasure { get; set; }
 

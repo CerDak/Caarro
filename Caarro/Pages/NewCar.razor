@@ -1,7 +1,6 @@
-@page "/NewCar"
+@page "/car/new"
 @using Caarro.Data
 @using Caarro.Service
-@using Microsoft.Extensions.Logging
 @inject NavigationManager _NavigationManager
 @inject VehicleService _VehicleService
 
@@ -10,12 +9,12 @@
 
 <EditForm Model="@_vehicle" OnSubmit="@SubmitNewVehicle">
     <InputText id="name" placeholder="Name" @bind-Value="_vehicle.Name"/>
+    <InputNumber id="year" placeholder="Year" @bind-Value="_vehicle.Year" min="1886" max="9999"/>
     <InputText id="manufacturer" placeholder="Manufacturer" @bind-Value="_vehicle.Manufacturer"/>
     <InputText id="model" placeholder="Model" @bind-Value="_vehicle.Model"/>
+    <InputNumber id="fuelCapacity" placeholder="Fuel Capacity" @bind-Value="_vehicle.FuelCapacity" min="0" max="9999"/>
     <InputText id="licensePlate" placeholder="License Plate Number" @bind-Value="_vehicle.LicensePlate"/>
     <InputText id="vin" placeholder="VIN" @bind-Value="_vehicle.VehicleIdentificationNumber"/>
-    <InputNumber id="year" placeholder="Model Year" @bind-Value="_vehicle.Year" min="1886" max="9999"/>
-    <InputNumber id="fuelCapacity" placeholder="Fuel Capacity" @bind-Value="_vehicle.FuelCapacity" min="0" max="9999"/>
     <InputSelect id="fuelType" @bind-Value="_vehicle.FuelType">
         @foreach (var fuel in Enum.GetValues(typeof(FuelType)))
         {

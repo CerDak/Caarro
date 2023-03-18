@@ -30,7 +30,7 @@ else
         @foreach (var vehicle in _vehicles)
         {
             <tr>
-                <td><a href="/Car/@vehicle.Id">@vehicle.Name</a></td>
+                <td><a href="/Car/@vehicle!.Id">@vehicle.Name</a></td>
                 <td>@vehicle.Manufacturer</td>
                 <td>@vehicle.Model</td>
             </tr>
@@ -40,7 +40,7 @@ else
 }
 
 @code {
-    private List<Vehicle>? _vehicles;
+    private List<Vehicle?>? _vehicles;
 
     protected override async Task OnInitializedAsync()
     {

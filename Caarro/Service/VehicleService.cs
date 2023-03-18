@@ -1,5 +1,6 @@
 ﻿using Caarro.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Caarro.Service;
 
@@ -14,12 +15,12 @@ public class VehicleService
         _db = db;
     }
 
-    public async Task<List<Vehicle>> GetAllVehicles()
+    public async Task<List<Vehicle?>> GetAllVehicles()
     {
-        return await _db.Vehicles.Where(v => v.Active == true).ToListAsync();
+        return (await _db.Vehicles.Where(v => v.Active == true).ToListAsync())!;
     }
 
-    public async Task<Vehicle> GetVehicle(int id)
+    public async Task<Vehicle?> GetVehicle(int id)
     {
         return await _db.Vehicles.SingleOrDefaultAsync(v => v.Id == id);
     }
