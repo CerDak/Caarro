@@ -2,6 +2,7 @@
 @using Caarro.Data
 @using Caarro.Service
 @using Microsoft.Extensions.Logging
+@inject NavigationManager _NavigationManager
 @inject VehicleService _vehicleService
 @inject ILogger<NewCar> _log
 
@@ -14,15 +15,15 @@
     <InputText id="model" placeholder="Model" @bind-Value="_vehicle.Model"/>
     <InputText id="licensePlate" placeholder="License Plate Number" @bind-Value="_vehicle.LicensePlate"/>
     <InputText id="vin" placeholder="VIN" @bind-Value="_vehicle.VehicleIdentificationNumber"/>
-    <InputNumber id="year" placeholder="Model Year" @bind-Value="_vehicle.Year"/>
-    <InputNumber id="fuelCapacity" placeholder="Fuel Capacity" @bind-Value="_vehicle.FuelCapacity"/>
-    <InputSelect id="fuelType" placeholder="Fuel Type" @bind-Value="_vehicle.FuelType">
+    <InputNumber id="year" placeholder="Model Year" @bind-Value="_vehicle.Year" min="1886" max="9999"/>
+    <InputNumber id="fuelCapacity" placeholder="Fuel Capacity" @bind-Value="_vehicle.FuelCapacity" min="0" max="9999"/>
+    <InputSelect id="fuelType" @bind-Value="_vehicle.FuelType">
         @foreach (var fuel in Enum.GetValues(typeof(FuelType)))
         {
             <option value="@fuel">@fuel</option>
         }
     </InputSelect>
-    <InputSelect id="unitOfMeasure" placeholder="Miles/Kilometers" @bind-Value="_vehicle.UnitOfMeasure">
+    <InputSelect id="unitOfMeasure" @bind-Value="_vehicle.UnitOfMeasure">
         @foreach (var unit in Enum.GetValues(typeof(UnitOfMeasure)))
         {
             <option value="@unit">@unit</option>
@@ -39,5 +40,6 @@
     {
         _log.LogInformation("Adding new car {name}", _vehicle.Name);
         await _vehicleService.AddVehicle(_vehicle);
+        _NavigationManager.NavigateTo("/");
     }
 }

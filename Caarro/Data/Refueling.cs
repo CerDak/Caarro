@@ -9,6 +9,6 @@ public class Refueling : BaseEntity
     public double Price { get; set; }
     public double FuelAmount { get; set; }
     public bool ToFull { get; set; }
-    public string?  Location { get; set; }
+    public string? Location { get; set; }
     public string? Driver { get; set; }
 }

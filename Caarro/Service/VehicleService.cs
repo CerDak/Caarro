@@ -28,7 +28,7 @@ public class VehicleService
     {
         vehicle.Date = DateTime.Now;
         vehicle.Active = true;
-        
+
         _db.Vehicles.Add(vehicle);
         await _db.SaveChangesAsync();
     }

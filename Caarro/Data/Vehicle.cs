@@ -14,7 +14,7 @@ public class Vehicle : BaseEntity
     public double FuelCapacity { get; set; }
     public FuelType FuelType { get; set; }
     public UnitOfMeasure UnitOfMeasure { get; set; }
-    
+
     public ICollection<Reminder>? Reminders { get; set; }
     public ICollection<Service>? Services { get; set; }
     public ICollection<Refueling>? Refuelings { get; set; }
@@ -24,23 +24,19 @@ public class Vehicle : BaseEntity
 
 public enum UnitOfMeasure
 {
-    Mile = 1,
-    Kilometer = 2,
+    Mile,
+    Kilometer,
 }
 
 public enum FuelType
 {
-    Unknown,
-    Gas85,
-    Gas86,
-    Gas87,
-    Gas88,
-    Gas89,
-    Gas90,
-    Gas91,
-    Gas92,
-    Gas93,
-    Diesel1,
-    Diesel2,
+    Gas,
+    Diesel,
     Electric,
+    GasMidgrade,
+    GasPremium,
+    BioDiesel,
+    Ethanol,
+    CNG,
+    LPG,
 }

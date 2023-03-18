@@ -6,7 +6,7 @@ namespace Caarro.Data;
 public class CaarroDbContext : DbContext
 {
     public CaarroDbContext(DbContextOptions<CaarroDbContext> options) : base(options) { }
-    
+
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<Refueling> Refueling { get; set; }
     public DbSet<Reminder> Reminders { get; set; }
@@ -17,5 +17,5 @@ public class CaarroDbContext : DbContext
 
 internal class UtcValueConverter : ValueConverter<DateTime, DateTime>
 {
-    public UtcValueConverter() : base(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc)) {}
+    public UtcValueConverter() : base(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc)) { }
 }
