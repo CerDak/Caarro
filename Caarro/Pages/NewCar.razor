@@ -3,8 +3,7 @@
 @using Caarro.Service
 @using Microsoft.Extensions.Logging
 @inject NavigationManager _NavigationManager
-@inject VehicleService _vehicleService
-@inject ILogger<NewCar> _log
+@inject VehicleService _VehicleService
 
 <PageTitle>New Car</PageTitle>
 <h1>New Car</h1>
@@ -38,8 +37,7 @@
 
     private async Task SubmitNewVehicle()
     {
-        _log.LogInformation("Adding new car {name}", _vehicle.Name);
-        await _vehicleService.AddVehicle(_vehicle);
-        _NavigationManager.NavigateTo("/");
+        var carId = await _VehicleService.AddVehicle(_vehicle);
+        _NavigationManager.NavigateTo($"/car/{carId}");
     }
 }

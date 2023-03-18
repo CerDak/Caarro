@@ -24,13 +24,14 @@ public class VehicleService
         return await _db.Vehicles.SingleOrDefaultAsync(v => v.Id == id);
     }
 
-    public async Task AddVehicle(Vehicle vehicle)
+    public async Task<int> AddVehicle(Vehicle vehicle)
     {
         vehicle.Date = DateTime.Now;
         vehicle.Active = true;
 
-        _db.Vehicles.Add(vehicle);
+        var e = _db.Vehicles.Add(vehicle);
         await _db.SaveChangesAsync();
+        return e.Entity.Id;
     }
 
     public async Task DeleteVehicle(Vehicle vehicle)
