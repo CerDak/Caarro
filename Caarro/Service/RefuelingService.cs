@@ -14,25 +14,26 @@ public class RefuelingService
         _db = db;
     }
 
-    public async Task<List<Refueling?>> GetAllRefuelings(int carId)
+    public async Task<List<Refueling?>> GetAllRefuelingsAsync(int carId)
     {
         return (await _db.Refueling.Where(r => r.VehicleId == carId && r.Active == true).ToListAsync())!;
     }
 
-    public async Task<Refueling?> GetRefueling(int id)
+    public async Task<Refueling?> GetRefuelingAsync(int id)
     {
         return await _db.Refueling.SingleOrDefaultAsync(v => v.Id == id);
     }
 
-    public async Task AddRefueling(Refueling refueling)
+    public async Task AddRefuelingAsync(Refueling refueling)
     {
         refueling.Date = DateTime.Now;
+        refueling.Active = true;
 
         _db.Refueling.Add(refueling);
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteRefueling(Refueling refueling)
+    public async Task DeleteRefuelingAsync(Refueling refueling)
     {
         var x = await _db.Refueling.SingleOrDefaultAsync(v => v.Id == refueling.Id);
         if (x is not null)
@@ -43,7 +44,7 @@ public class RefuelingService
         }
     }
 
-    public async Task UpdateRefueling(Refueling refueling)
+    public async Task UpdateRefuelingAsync(Refueling refueling)
     {
         _db.Refueling.Update(refueling);
         await _db.SaveChangesAsync();
