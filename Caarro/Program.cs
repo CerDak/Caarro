@@ -32,6 +32,8 @@ builder.Services.AddHealthChecks()
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
+
+builder.Services.AddScoped<RefuelingService>();
 builder.Services.AddScoped<VehicleService>();
 
 builder.Services.AddDbContext<CaarroDbContext>(db =>

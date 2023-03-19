@@ -1,0 +1,46 @@
+@page "/refueling/{CarId:int}"
+@using Caarro.Data
+@using Caarro.Service
+@using Microsoft.Extensions.Logging
+@inject NavigationManager _NavigationManager
+@inject RefuelingService _RefuelingService
+@inject ILogger<Refueling> _Log
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+
+    private List<Refueling?>? _refueling;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _refueling = await _RefuelingService.GetAllRefuelings(CarId);
+    }
+}
+
+@if (_refueling is null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Odometer</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        @foreach (var refueling in _refueling)
+        {
+            <tr>
+                <td><a href="/refueling/@refueling!.Id">@refueling.Date</a></td>
+                <td>@refueling.Odometer</td>
+                <td>@refueling.Price</td>
+            </tr>
+        }
+    </table>
+}
