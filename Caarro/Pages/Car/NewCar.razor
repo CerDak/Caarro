@@ -36,7 +36,7 @@
 
     private async Task SubmitNewVehicle()
     {
-        var carId = await _VehicleService.AddVehicle(_vehicle);
+        var carId = await _VehicleService.AddVehicleAsync(_vehicle);
         _NavigationManager.NavigateTo($"/car/{carId}");
     }
 }

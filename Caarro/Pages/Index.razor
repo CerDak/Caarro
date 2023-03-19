@@ -9,7 +9,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _vehicles = await _VehicleService.GetAllVehicles();
+        _vehicles = await _VehicleService.GetAllVehiclesAsync();
     }
 }
 

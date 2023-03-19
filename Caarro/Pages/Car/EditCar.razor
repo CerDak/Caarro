@@ -45,12 +45,12 @@ else
 
     private async Task SubmitVehicleUpdate()
     {
-        await _VehicleService.UpdateVehicle(_vehicle!);
+        await _VehicleService.UpdateVehicleAsync(_vehicle!);
         _NavigationManager.NavigateTo($"/car/{CarId}");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _vehicle = await _VehicleService.GetVehicle(CarId);
+        _vehicle = await _VehicleService.GetVehicleAsync(CarId);
     }
 }
