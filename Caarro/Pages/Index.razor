@@ -4,6 +4,15 @@
 @inject NavigationManager _NavigationManager
 @inject VehicleService _VehicleService
 
+@code {
+    private List<Vehicle?>? _vehicles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _vehicles = await _VehicleService.GetAllVehicles();
+    }
+}
+
 <PageTitle>Caarro</PageTitle>
 
 <h1>Your Cars</h1>
@@ -37,13 +46,4 @@ else
         }
         </tbody>
     </table>
-}
-
-@code {
-    private List<Vehicle?>? _vehicles;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _vehicles = await _VehicleService.GetAllVehicles();
-    }
 }

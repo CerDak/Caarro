@@ -6,14 +6,33 @@
 @inject VehicleService _VehicleService
 @inject ILogger<NewCar> _Log
 
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+
+    private Vehicle? _vehicle;
+
+    private void EditCar()
+    {
+        _NavigationManager.NavigateTo($"/car/edit/{CarId}");
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _vehicle = await _VehicleService.GetVehicle(CarId);
+    }
+}
+
 @if (_vehicle is null)
 {
+    <PageTitle>Caarro</PageTitle>
     <p>
         <em>Not found.</em>
     </p>
 }
 else
 {
+    <PageTitle>Caarro - @_vehicle.Name</PageTitle>
     <table class="table">
         <thead>
         <tr>
@@ -39,21 +58,8 @@ else
         </tbody>
     </table>
     <button type="button" onclick="@EditCar">Edit</button>
-}
-
-@code {
-    [Parameter]
-    public int CarId { get; set; }
-
-    private Vehicle? _vehicle;
-
-    private void EditCar()
-    {
-        _NavigationManager.NavigateTo($"/car/edit/{CarId}");
-    }
-    
-    protected override async Task OnInitializedAsync()
-    {
-        _vehicle = await _VehicleService.GetVehicle(CarId);
-    }
+                                            
+    <h4>Details:</h4>
+    <p><a href="/refueling/@_vehicle.Id">Refueling</a></p>
+    <p>Services</p>
 }
