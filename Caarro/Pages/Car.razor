@@ -27,17 +27,18 @@ else
         </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>@_vehicle.Name</td>
-                <td>@_vehicle.Year</td>
-                <td>@(_vehicle.Manufacturer ?? "Unknown")</td>
-                <td>@(_vehicle.Model ?? "Unknown")</td>
-                <td>@_vehicle.FuelCapacity</td>
-                <td>@_vehicle.FuelType</td>
-                <td>@_vehicle.Date</td>
-            </tr>
+        <tr>
+            <td>@_vehicle.Name</td>
+            <td>@_vehicle.Year</td>
+            <td>@(_vehicle.Manufacturer ?? "Unknown")</td>
+            <td>@(_vehicle.Model ?? "Unknown")</td>
+            <td>@_vehicle.FuelCapacity</td>
+            <td>@_vehicle.FuelType</td>
+            <td>@_vehicle.Date</td>
+        </tr>
         </tbody>
     </table>
+    <button type="button" onclick="@EditCar">Edit</button>
 }
 
 @code {
@@ -45,6 +46,11 @@ else
     public int CarId { get; set; }
 
     private Vehicle? _vehicle;
+
+    private void EditCar()
+    {
+        _NavigationManager.NavigateTo($"/car/edit/{CarId}");
+    }
     
     protected override async Task OnInitializedAsync()
     {
