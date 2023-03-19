@@ -43,11 +43,11 @@ processes = []
     restart_limit = 0
     timeout = "2s"
 
-  [[services.http_checks]]
-    interval = "15s"
-    grace_period = "5s"
-    method = "get"
-    path = "/healthz"
-    protocol = "http"
-    restart_limit = 1
-    timeout = "2s"
+#  [[services.http_checks]]
+#    interval = "15s"
+#    grace_period = "5s"
+#    method = "get"
+#    path = "/healthz"
+#    protocol = "http"
+#    restart_limit = 1
+#    timeout = "2s"
