@@ -18,6 +18,10 @@ processes = []
   source = "litefs"
   destination = "/var/lib/litefs"
 
+[metrics]
+  port = 9091
+  path = "/metrics"
+
 [[services]]
   internal_port = 80
   processes = ["app"]
@@ -42,12 +46,3 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
-
-#  [[services.http_checks]]
-#    interval = "15s"
-#    grace_period = "5s"
-#    method = "get"
-#    path = "/healthz"
-#    protocol = "http"
-#    restart_limit = 1
-#    timeout = "2s"
