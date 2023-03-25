@@ -38,10 +38,6 @@ else
         <tr>
             <th>Name</th>
             <th>Year</th>
-            <th>Manufacturer</th>
-            <th>Model</th>
-            <th>Fuel Capacity</th>
-            <th>Fuel Type</th>
             <th>Added On</th>
         </tr>
         </thead>
@@ -49,10 +45,6 @@ else
         <tr>
             <td>@_vehicle.Name</td>
             <td>@_vehicle.Year</td>
-            <td>@(_vehicle.Manufacturer ?? "Unknown")</td>
-            <td>@(_vehicle.Model ?? "Unknown")</td>
-            <td>@_vehicle.FuelCapacity</td>
-            <td>@_vehicle.FuelType</td>
             <td>@_vehicle.Date</td>
         </tr>
         </tbody>
@@ -61,5 +53,5 @@ else
                                             
     <h4>Details:</h4>
     <p><a href="/refueling/@_vehicle.Id">Refueling</a></p>
-    <p>Services</p>
+    <p><a href="/services/@_vehicle.Id">Services</a></p>
 }
