@@ -7,6 +7,7 @@ using Caarro.Data;
 using Caarro.Service;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using OpenTelemetry.Metrics;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,7 +59,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -67,6 +67,8 @@ app.MapHealthChecks("/healthz", new HealthCheckOptions
     AllowCachingResponses = false,
 });
 
+app.UseMetricServer(9091);
+app.UseHttpMetrics();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
