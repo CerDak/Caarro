@@ -4,7 +4,7 @@ using Microsoft.Identity.Web.UI;
 using Microsoft.EntityFrameworkCore;
 
 using Caarro.Data;
-using Caarro.Service;
+using Caarro.Services;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using OpenTelemetry.Metrics;
 using Prometheus;

@@ -1,7 +1,7 @@
 ﻿using Caarro.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Caarro.Service;
+namespace Caarro.Services;
 
 public class VehicleService
 {
