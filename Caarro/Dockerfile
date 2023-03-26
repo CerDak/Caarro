@@ -16,7 +16,6 @@ FROM build AS publish
 RUN dotnet publish "Caarro.csproj" -c Release -o /app/publish
 
 FROM base AS final
-ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Caarro.dll"]
