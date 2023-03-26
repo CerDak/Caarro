@@ -35,6 +35,7 @@ builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
 
 builder.Services.AddScoped<RefuelingService>();
+builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<VehicleService>();
 
 builder.Services.AddDbContext<CaarroDbContext>(db =>

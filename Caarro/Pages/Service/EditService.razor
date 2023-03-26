@@ -1,0 +1,57 @@
+@page "/service/{CarId:int}/edit/{ServiceId:int}"
+@using Caarro.Data
+@using Caarro.Services
+@inject NavigationManager _NavigationManager
+@inject ServicesService _ServicesService
+
+<PageTitle>Caarro - Edit Service</PageTitle>
+
+@if (_service is null)
+{
+    
+}
+else
+{
+    <EditForm Model="_service" OnSubmit="@SubmitServiceUpdate">
+        <InputNumber id="odometer" placeholder="Odometer" @bind-Value="_service.Odometer"/>
+        <InputSelect id="service-type" placeholder="Service Type" @bind-Value="_service.Type">
+            @foreach (var type in Enum.GetValues(typeof(ServiceType)))
+            {
+                <option value="@type">@type</option>
+            }
+        </InputSelect>
+        <InputText id="location" placeholder="Location" @bind-Value="@_service.Location"/>
+        <InputText id="driver" placeholder="Driver" @bind-Value="@_service.Driver"/>
+        <InputNumber id="cost" placeholder="Cost" @bind-Value="_service.Amount"/>
+    
+        <button type="submit">Update</button>
+    </EditForm>
+
+    <button type="submit" onclick="@SubmitServiceDelete">Delete</button>
+}
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+    [Parameter]
+    public int ServiceId { get; set; }
+
+    private Service? _service;
+
+    private async Task SubmitServiceUpdate()
+    {
+        await _ServicesService.UpdateServiceAsync(_service!);
+        _NavigationManager.NavigateTo($"/service/{CarId}/");
+    }
+
+    private async Task SubmitServiceDelete()
+    {
+        await _ServicesService.DeleteServiceAsync(_service!);
+        _NavigationManager.NavigateTo($"/service/{CarId}/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _service = await _ServicesService.GetServiceAsync(ServiceId);
+    }
+}

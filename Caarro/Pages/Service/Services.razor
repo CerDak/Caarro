@@ -1,0 +1,50 @@
+@page "/service/{CarId:int}"
+@using Caarro.Data
+@using Caarro.Services
+@inject NavigationManager _NavigationManager
+@inject ServicesService _ServicesService
+
+<PageTitle>Caarro - Services</PageTitle>
+
+@if (_services is null)
+{
+    
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Cost</th>
+        </tr>
+        </thead>
+        @foreach (var service in _services)
+        {
+            <tr>
+                <td><a href="/service/@service.VehicleId/edit/@service.Id">@service.Date</a></td>
+                <td>@service.Type</td>
+                <td>@service.Amount</td>
+            </tr>
+        }
+    </table>
+    <button type="submit" onclick="@NewService">New Service</button>
+}
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+
+    private List<Service?>? _services;
+
+    private void NewService()
+    {
+        _NavigationManager.NavigateTo($"/service/{CarId}/new");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _services = await _ServicesService.GetAllServicesAsync(CarId);
+    }
+}
