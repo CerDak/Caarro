@@ -10,7 +10,7 @@ public class Income : BaseEntity
     public double Amount { get; set; }
     public string? Driver { get; set; }
     public string? Location { get; set; }
-    
+
     public int VehicleId { get; set; }
     public Vehicle Vehicle { get; set; }
 }

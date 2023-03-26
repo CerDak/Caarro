@@ -13,7 +13,7 @@ public class Expense : BaseEntity
     public string? PaymentMethod { get; set; }
     public string? Reason { get; set; }
     public double Amount { get; set; }
-    
+
     public int VehicleId { get; set; }
     public Vehicle Vehicle { get; set; }
 }

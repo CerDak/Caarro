@@ -1,11 +1,12 @@
 using Caarro.Data;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Caarro.Services;
 
 public class ServicesService
 {
-    private ILogger<ServicesService> _log;
+    private readonly ILogger<ServicesService> _log;
     private readonly CaarroDbContext _db;
 
     public ServicesService(ILogger<ServicesService> logger, CaarroDbContext db)

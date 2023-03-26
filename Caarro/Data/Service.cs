@@ -11,7 +11,7 @@ public class Service : BaseEntity
     public string? Driver { get; set; }
     public string? PaymentMethod { get; set; }
     public double? Amount { get; set; }
-    
+
     public int VehicleId { get; set; }
     public Vehicle Vehicle { get; set; }
 }

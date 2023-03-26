@@ -1,11 +1,12 @@
 using Caarro.Data;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Caarro.Services;
 
 public class RefuelingService
 {
-    private ILogger<RefuelingService> _log;
+    private readonly ILogger<RefuelingService> _log;
     private readonly CaarroDbContext _db;
 
     public RefuelingService(ILogger<RefuelingService> logger, CaarroDbContext db)

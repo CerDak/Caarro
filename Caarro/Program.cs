@@ -1,12 +1,14 @@
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
-using Microsoft.EntityFrameworkCore;
-
 using Caarro.Data;
 using Caarro.Services;
+
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+
 using OpenTelemetry.Metrics;
+
 using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
