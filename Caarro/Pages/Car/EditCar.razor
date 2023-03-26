@@ -36,8 +36,9 @@ else
 
         <button type="submit">Update</button>
     </EditForm>
+    <button type="submit" onclick="">Delete</button>
 }
-    
+
 @code {
     [Parameter]
     public int CarId { get; set; }
@@ -47,6 +48,12 @@ else
     {
         await _VehicleService.UpdateVehicleAsync(_vehicle!);
         _NavigationManager.NavigateTo($"/car/{CarId}");
+    }
+
+    private async Task SubmitVehicleDelete()
+    {
+        await _VehicleService.DeleteVehicleAsync(_vehicle!);
+        _NavigationManager.NavigateTo("/");
     }
 
     protected override async Task OnInitializedAsync()

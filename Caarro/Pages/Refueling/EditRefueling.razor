@@ -29,6 +29,7 @@ else
     
         <button type="submit">Update</button>
     </EditForm>
+    <button type="submit" onclick="@SubmitRefuelingDelete">Delete</button>
 }
 
 @code {
@@ -42,6 +43,12 @@ else
     private async Task SubmitRefuelingUpdate()
     {
         await _RefuelingService.UpdateRefuelingAsync(_refueling!);
+        _NavigationManager.NavigateTo($"/refueling/{CarId}/");
+    }
+
+    private async Task SubmitRefuelingDelete()
+    {
+        await _RefuelingService.DeleteRefuelingAsync(_refueling!);
         _NavigationManager.NavigateTo($"/refueling/{CarId}/");
     }
 
