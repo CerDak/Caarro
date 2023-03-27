@@ -4,46 +4,46 @@
 @inject NavigationManager _NavigationManager
 @inject VehicleService _VehicleService
 
+<PageTitle>Caarro</PageTitle>
+
+<MudContainer>
+    <MudDataGrid Items="@_vehicles" Filterable="false" SortMode="SortMode.None" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="x => x.Name"/>
+            <PropertyColumn Property="x => x.Manufacturer"/>
+            <PropertyColumn Property="x => x.Model"/>
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudStack Row>
+                        <MudButton Size="@Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => GotoCarDetails(context.Item.Id))">
+                            Details
+                        </MudButton>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+</MudContainer>
+
+<MudContainer Class="align-content-center">
+    <MudPaper Elevation="0" Class="d-flex align-content-start flex-wrap flex-grow-1 gap-4">
+    <MudMenu Icon="@Icons.Material.Filled.AddCircle" Size="Size.Large">
+        <MudMenuItem Icon="@Icons.Material.Filled.LocalGasStation">Refueling</MudMenuItem>
+        <MudMenuItem Icon="@Icons.Material.Filled.DirectionsCar">Vehicle</MudMenuItem>
+    </MudMenu>
+    </MudPaper>
+</MudContainer>
+
 @code {
-    private List<Vehicle?>? _vehicles;
+    IEnumerable<Vehicle>? _vehicles;
+
+    void GotoCarDetails(int id)
+    {
+        _NavigationManager.NavigateTo($"/car/{id}");
+    }
 
     protected override async Task OnInitializedAsync()
     {
         _vehicles = await _VehicleService.GetAllVehiclesAsync();
     }
-}
-
-<PageTitle>Caarro</PageTitle>
-
-<h1>Your Cars</h1>
-
-<p>This shows cars</p>
-
-@if (_vehicles is null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
-}
-else
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Manufacturer</th>
-            <th>Model</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var vehicle in _vehicles)
-        {
-            <tr>
-                <td><a href="/Car/@vehicle!.Id">@vehicle.Name</a></td>
-                <td>@vehicle.Manufacturer</td>
-                <td>@vehicle.Model</td>
-            </tr>
-        }
-        </tbody>
-    </table>
 }
