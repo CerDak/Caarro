@@ -36,7 +36,7 @@ else
     [Parameter]
     public int CarId { get; set; }
 
-    private List<Service?>? _services;
+    private IEnumerable<Service> _services;
 
     private void NewService()
     {

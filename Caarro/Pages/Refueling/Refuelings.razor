@@ -8,43 +8,40 @@
 
 <PageTitle>Caarro - Refueling</PageTitle>
 
-@if (_refueling is null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
-}
-else
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Odometer</th>
-            <th>Price</th>
-        </tr>
-        </thead>
-        @foreach (var refueling in _refueling)
-        {
-            <tr>
-                <td><a href="/refueling/@refueling.VehicleId/edit/@refueling.Id">@refueling.Date</a></td>
-                <td>@refueling.Odometer</td>
-                <td>@refueling.Price</td>
-            </tr>
-        }
-    </table>
-    <button type="submit" onclick="@NewRefueling">New Refueling</button>
-}
+<MudContainer>
+    <MudDataGrid Items="@_refueling" Filterable="false" SortMode="SortMode.None" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="x => x.Date"/>
+            <PropertyColumn Property="x => x.Odometer"/>
+            <PropertyColumn Property="x => x.Price"/>
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudStack Row>
+                        <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => GotoRefuelingDetails(context.Item.Id))">
+                            Details
+                        </MudButton>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" OnClick="NewRefueling">New Refueling</MudButton>
+</MudContainer>
 
 @code {
     [Parameter]
     public int CarId { get; set; }
 
-    private List<Refueling?>? _refueling;
+    private IEnumerable<Refueling>? _refueling;
 
-    private void NewRefueling()
+    void NewRefueling()
     {
         _NavigationManager.NavigateTo($"/refueling/{CarId}/new");
+    }
+
+    void GotoRefuelingDetails(int id)
+    {
+        _NavigationManager.NavigateTo($"/refueling/{id}");
     }
 
     protected override async Task OnInitializedAsync()

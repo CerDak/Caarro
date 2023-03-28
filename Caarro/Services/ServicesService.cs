@@ -15,9 +15,9 @@ public class ServicesService
         _db = db;
     }
 
-    public async Task<List<Service?>> GetAllServicesAsync(int carId)
+    public async Task<IEnumerable<Service>> GetAllServicesAsync(int carId)
     {
-        return (await _db.Services.Where(s => s.VehicleId == carId && s.Active == true).ToListAsync())!;
+        return await _db.Services.Where(s => s.VehicleId == carId && s.Active == true).ToListAsync();
     }
 
     public async Task<Service?> GetServiceAsync(int id)

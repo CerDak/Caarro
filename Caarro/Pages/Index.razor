@@ -1,46 +1,75 @@
 ﻿@page "/"
 @using Caarro.Data
 @using Caarro.Services
+@using SQLitePCL
 @inject NavigationManager _NavigationManager
 @inject VehicleService _VehicleService
 
 <PageTitle>Caarro</PageTitle>
 
 <MudContainer>
-    <MudDataGrid Items="@_vehicles" Filterable="false" SortMode="SortMode.None" Groupable="false">
+    <MudDataGrid T="Vehicle" Items="@_vehicles" ReadOnly="false" Filterable="false" SortMode="SortMode.None"
+                 Groupable="false" EditMode="DataGridEditMode.Form" CommittedItemChanges="CommittedVehicleChanges"
+                 Bordered="true" EditTrigger="DataGridEditTrigger.Manual">
         <Columns>
-            <PropertyColumn Property="x => x.Name"/>
+            <PropertyColumn  Property="x => x.Name">
+                <MudLink></MudLink>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.Year"/>
             <PropertyColumn Property="x => x.Manufacturer"/>
             <PropertyColumn Property="x => x.Model"/>
-            <TemplateColumn>
+            <PropertyColumn Property="x => x.FuelType" Title="Fuel Type">
+                <EditTemplate>
+                    <MudSelect @bind-Value="context.Item.FuelType" Required RequiredError="You must select a fuel type."
+                               Margin="Margin.Dense">
+                        @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
+                        {
+                            <MudSelectItem Value="@fuel">@fuel</MudSelectItem>
+                        }
+                    </MudSelect>
+                </EditTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.FuelCapacity" Title="Capacity"/>
+            <PropertyColumn Property="x => x.LicensePlate" Title="License Plate"/>
+            <PropertyColumn Property="x => x.VehicleIdentificationNumber" Title="VIN"/>
+            <PropertyColumn Property="x => x.Date" IsEditable="false"/>
+            <TemplateColumn Title="Details">
                 <CellTemplate>
-                    <MudStack Row>
-                        <MudButton Size="@Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => GotoCarDetails(context.Item.Id))">
-                            Details
-                        </MudButton>
-                    </MudStack>
+                    <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Medium" Class="object-left" OnClick="@context.Actions.StartEditingItem"/>
+                    <MudIconButton Icon="@Icons.Material.Filled.LocalGasStation" Size="Size.Medium" Class="object-center" OnClick="() => GotoRefuelingHistory(context.Item.Id)"/>
+                    <MudIconButton Icon="@Icons.Material.Filled.Build" Size="Size.Medium" Class="object-right" OnClick="() => GotoServiceHistory(context.Item.Id)"/>
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
     </MudDataGrid>
 </MudContainer>
 
-<MudContainer Class="align-content-center">
-    <MudPaper Elevation="0" Class="d-flex align-content-start flex-wrap flex-grow-1 gap-4">
-    <MudMenu Icon="@Icons.Material.Filled.AddCircle" Size="Size.Large">
-        <MudMenuItem Icon="@Icons.Material.Filled.LocalGasStation">Refueling</MudMenuItem>
-        <MudMenuItem Icon="@Icons.Material.Filled.Build">Service</MudMenuItem>
-        <MudMenuItem Icon="@Icons.Material.Filled.DirectionsCar">Vehicle</MudMenuItem>
-    </MudMenu>
+<MudContainer Class="">
+    <MudPaper Class="d-inline-flex pa-6" Elevation="0">
+        <MudMenu Class="object-center" Icon="@Icons.Material.Filled.AddCircle" Size="Size.Large">
+            <MudMenuItem Icon="@Icons.Material.Filled.LocalGasStation">Refueling</MudMenuItem>
+            <MudMenuItem Icon="@Icons.Material.Filled.Build">Service</MudMenuItem>
+            <MudMenuItem Icon="@Icons.Material.Filled.DirectionsCar">Vehicle</MudMenuItem>
+        </MudMenu>
     </MudPaper>
 </MudContainer>
 
 @code {
     IEnumerable<Vehicle>? _vehicles;
 
-    void GotoCarDetails(int id)
+    void GotoServiceHistory(int id)
     {
-        _NavigationManager.NavigateTo($"/car/{id}");
+        _NavigationManager.NavigateTo($"/car/{id}/service");
+    }
+
+    void GotoRefuelingHistory(int id)
+    {
+        _NavigationManager.NavigateTo($"/car/{id}/refueling");
+    }
+    
+    async Task CommittedVehicleChanges(Vehicle vehicle)
+    {
+        await _VehicleService.UpdateVehicleAsync(vehicle);
     }
 
     protected override async Task OnInitializedAsync()
