@@ -1,57 +1,49 @@
-@page "/car/{CarId:int}"
+@page "/Car/{CarId:int}"
 @using Caarro.Data
 @using Caarro.Services
-@using Microsoft.Extensions.Logging
-@inject NavigationManager _NavigationManager
-@inject VehicleService _VehicleService
-@inject ILogger<NewCar> _Log
+@inject RefuelingService RefuelingService
+@inject ServicesService ServicesService
+
+<PageTitle>Caarro - Detail</PageTitle>
+
+<MudContainer>
+    <MudPaper Elevation="1">
+        <MudDataGrid T="Refueling" Items="_refuelings" ReadOnly Bordered>
+            <Columns>
+                <PropertyColumn Property="x => x.Odometer"/>
+                <PropertyColumn Property="x => x.Price"/>
+                <PropertyColumn Property="x => x.FuelAmount" Title="Fuel Amount"/>
+                <PropertyColumn Property="x => x.ToFull"/>
+                <PropertyColumn Property="x => x.Driver"/>
+                <PropertyColumn Property="x => x.Location"/>
+                <PropertyColumn Property="x => x.Date"/>
+            </Columns>
+        </MudDataGrid>        
+    </MudPaper>
+    <MudPaper Elevation="1">
+        <MudDataGrid T="Service" Items="_services" ReadOnly Bordered>
+            <Columns>
+                <PropertyColumn Property="x => x.Odometer"/>
+                <PropertyColumn Property="x => x.Amount"/>
+                <PropertyColumn Property="x => x.Type"/>
+                <PropertyColumn Property="x => x.Driver"/>
+                <PropertyColumn Property="x => x.Location"/>
+                <PropertyColumn Property="x => x.Date"/>
+            </Columns>
+        </MudDataGrid>
+    </MudPaper>
+</MudContainer>
 
 @code {
     [Parameter]
     public int CarId { get; set; }
-
-    private Vehicle? _vehicle;
-
-    private void EditCar()
-    {
-        _NavigationManager.NavigateTo($"/car/edit/{CarId}");
-    }
     
+    IEnumerable<Refueling>? _refuelings;
+    IEnumerable<Service>? _services;
+
     protected override async Task OnInitializedAsync()
     {
-        _vehicle = await _VehicleService.GetVehicleAsync(CarId);
+        _refuelings = await RefuelingService.GetAllRefuelingsAsync(CarId);
+        _services = await ServicesService.GetAllServicesAsync(CarId);
     }
-}
-
-@if (_vehicle is null)
-{
-    <PageTitle>Caarro</PageTitle>
-    <p>
-        <em>Not found.</em>
-    </p>
-}
-else
-{
-    <PageTitle>Caarro - @_vehicle.Name</PageTitle>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Year</th>
-            <th>Added On</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>@_vehicle.Name</td>
-            <td>@_vehicle.Year</td>
-            <td>@_vehicle.Date</td>
-        </tr>
-        </tbody>
-    </table>
-    <button type="button" onclick="@EditCar">Edit</button>
-                                            
-    <h4>Details:</h4>
-    <p><a href="/refueling/@_vehicle.Id">Refueling</a></p>
-    <p><a href="/service/@_vehicle.Id">Services</a></p>
 }
