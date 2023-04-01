@@ -35,21 +35,14 @@
                 <PropertyColumn Property="x => x.Date" IsEditable="false"/>
                 <TemplateColumn Title="Details">
                     <CellTemplate>
-                        <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Medium" Class="object-left"
-                                       OnClick="@context.Actions.StartEditingItem"/>
-                        <MudIconButton Icon="@Icons.Material.Filled.More" Size="Size.Medium" Class="object-right"
-                                       OnClick="() => GotoVehicleDetail(context.Item.Id)"/>
+                        <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Medium" OnClick="@context.Actions.StartEditingItem"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.More" Size="Size.Medium" OnClick="() => GotoVehicleDetail(context.Item.Id)"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.Build" Size="Size.Medium" OnClick="() => GotoNewService(context.Item.Id)"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.LocalGasStation" Size="Size.Medium" OnClick="() => GotoNewRefueling(context.Item.Id)"/>
                     </CellTemplate>
                 </TemplateColumn>
             </Columns>
         </MudDataGrid>
-        <div class="d-flex flex-center pa-6">
-            <MudMenu Icon="@Icons.Material.Filled.AddCircle" Size="Size.Large">
-                <MudMenuItem Icon="@Icons.Material.Filled.LocalGasStation">Refueling</MudMenuItem>
-                <MudMenuItem Icon="@Icons.Material.Filled.Build">Service</MudMenuItem>
-                <MudMenuItem Icon="@Icons.Material.Filled.DirectionsCar">Vehicle</MudMenuItem>
-            </MudMenu>
-        </div>
     </MudPaper>
 </MudContainer>
 
@@ -59,6 +52,16 @@
     void GotoVehicleDetail(int id)
     {
         NavigationManager.NavigateTo($"/car/{id}");
+    }
+
+    void GotoNewRefueling(int id)
+    {
+        NavigationManager.NavigateTo($"/car/{id}/refueling/new");
+    }
+
+    void GotoNewService(int id)
+    {
+        return;
     }
 
     async Task CommittedVehicleChanges(Vehicle vehicle)
