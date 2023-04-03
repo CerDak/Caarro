@@ -8,20 +8,21 @@
 
 <MudContainer>
     <MudText Typo="Typo.h4">Fueling History:</MudText>
-        <MudPaper Elevation="1">
-            <MudDataGrid T="Refueling" Items="_refuelings" ReadOnly Bordered>
-                <Columns>
-                    <PropertyColumn Property="x => x.Odometer"/>
-                    <PropertyColumn Property="x => x.Price"/>
-                    <PropertyColumn Property="x => x.FuelAmount" Title="Fuel Amount"/>
-                    <PropertyColumn Property="x => x.ToFull"/>
-                    <PropertyColumn Property="x => x.Driver"/>
-                    <PropertyColumn Property="x => x.Location"/>
-                    <PropertyColumn Property="x => x.Date"/>
-                </Columns>
-            </MudDataGrid>
-        </MudPaper>
-        <MudText Typo="Typo.h4">Service History:</MudText>
+    <MudPaper Elevation="1">
+        <MudDataGrid T="Refueling" Items="_refuelings" ReadOnly Bordered>
+            <Columns>
+                <PropertyColumn Property="x => x.Odometer"/>
+                <PropertyColumn Property="x => x.Price"/>
+                <PropertyColumn Property="x => x.FuelAmount" Title="Fuel Amount"/>
+                <PropertyColumn Property="x => x.ToFull"/>
+                <PropertyColumn Property="x => x.Driver"/>
+                <PropertyColumn Property="x => x.Location"/>
+                <PropertyColumn Property="x => x.Date"/>
+            </Columns>
+        </MudDataGrid>
+    </MudPaper>
+
+    <MudText Typo="Typo.h4">Service History:</MudText>
     <MudPaper Elevation="1">
         <MudDataGrid T="Service" Items="_services" ReadOnly Bordered>
             <Columns>
