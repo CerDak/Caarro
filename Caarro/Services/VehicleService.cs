@@ -15,9 +15,9 @@ public class VehicleService
         _db = db;
     }
 
-    public async Task<List<Vehicle?>> GetAllVehiclesAsync()
+    public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()
     {
-        return (await _db.Vehicles.Where(v => v.Active == true).ToListAsync())!;
+        return await _db.Vehicles.Where(v => v.Active == true).ToListAsync();
     }
 
     public async Task<Vehicle?> GetVehicleAsync(int id)

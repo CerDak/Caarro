@@ -1,0 +1,61 @@
+@page "/car/{CarId:int}/refueling/new"
+@using Caarro.Data
+@using Caarro.Services
+@inject NavigationManager NavigationManager
+@inject RefuelingService RefuelingService
+
+<PageTitle>Caarro - New Refueling</PageTitle>
+
+<MudContainer>
+    <MudGrid>
+        <MudCard>
+            <MudForm Model="@_refueling" @ref="_form" @bind-IsValid="@_success" @bind-Errors="@_errors">
+                <MudCardContent>
+                    <MudNumericField T="int" HideSpinButtons Label="Odometer" Required Min="0"
+                                     RequiredError="Odometer reading is required!" @bind-Value="_refueling.Odometer"/>
+                    <MudNumericField T="double" HideSpinButtons Format="F2" Label="Price" Required Min="0"
+                                     RequiredError="Refueling price is required!" @bind-Value="_refueling.Price"/>
+                    <MudNumericField T="int" HideSpinButtons Label="Fuel Amount" Required Min="0"
+                                     RequiredError="You must specify how much fuel you bought!"/>
+                    <MudCheckBox Size="Size.Small" Label="Full Tank" @bind-Checked="_refueling.ToFull"/>
+                    <MudTextField T="string" Label="Fueling Location" InputType="InputType.Text"
+                                  @bind-Value="_refueling.Location"/>
+                    <MudTextField T="string" Label="Driver" InputType="InputType.Text" @bind-Value="_refueling.Driver"/>
+                    <MudSelect T="FuelType" @bind-Value="_refueling.Fuel">
+                        @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
+                        {
+                            <MudSelectItem Value="@fuel"/>
+                        }
+                    </MudSelect>
+                </MudCardContent>
+            </MudForm>
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                           OnClick="async () => await Submit()">Add</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+
+    Refueling _refueling = new();
+
+    bool _success;
+    string[] _errors = { };
+    MudForm _form;
+
+    async Task Submit()
+    {
+        await _form.Validate();
+
+        if (_form.IsValid)
+        {
+            _refueling.VehicleId = CarId;
+            await RefuelingService.AddRefuelingAsync(_refueling);
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

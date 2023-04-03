@@ -1,9 +1,15 @@
 ﻿<AuthorizeView>
     <Authorized>
-        @context.User.Identity?.Name
-        <a href="MicrosoftIdentity/Account/SignOut">Log out</a>
+        <MudMenu Dense="true" AnchorOrigin="Origin.BottomLeft">
+            <ActivatorContent>
+                <MudAvatar Color="Color.Secondary">@char.ToUpper(@context.User.Identity!.Name![0])</MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem Href="MicrosoftIdentity/Account/SignOut">Sign Out</MudMenuItem>
+            </ChildContent>
+        </MudMenu>
     </Authorized>
     <NotAuthorized>
-        <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+        <MudLink Href="MicrosoftIdentity/Account/SignIn" Color="Color.Inherit">Log in</MudLink>
     </NotAuthorized>
 </AuthorizeView>

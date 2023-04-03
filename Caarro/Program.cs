@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 
+using MudBlazor.Services;
+
 using OpenTelemetry.Metrics;
 
 using Prometheus;
@@ -31,6 +33,8 @@ builder.Services.AddOpenTelemetry()
 
 builder.Services.AddHealthChecks()
     .AddSqlite(builder.Configuration.GetConnectionString("Sqlite")!);
+
+builder.Services.AddMudServices();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()

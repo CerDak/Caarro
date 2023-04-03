@@ -15,7 +15,7 @@ public class RefuelingService
         _db = db;
     }
 
-    public async Task<List<Refueling?>> GetAllRefuelingsAsync(int carId)
+    public async Task<IEnumerable<Refueling>> GetAllRefuelingsAsync(int carId)
     {
         return (await _db.Refueling.Where(r => r.VehicleId == carId && r.Active == true).ToListAsync())!;
     }

@@ -1,49 +1,76 @@
 ﻿@page "/"
 @using Caarro.Data
 @using Caarro.Services
-@inject NavigationManager _NavigationManager
-@inject VehicleService _VehicleService
-
-@code {
-    private List<Vehicle?>? _vehicles;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _vehicles = await _VehicleService.GetAllVehiclesAsync();
-    }
-}
+@inject NavigationManager NavigationManager
+@inject VehicleService VehicleService
 
 <PageTitle>Caarro</PageTitle>
 
-<h1>Your Cars</h1>
+<MudContainer>
+    <MudPaper>
+        <MudDataGrid T="Vehicle" Items="@_vehicles" ReadOnly="false" Filterable="false" SortMode="SortMode.None"
+                     Groupable="false" EditMode="DataGridEditMode.Form" CommittedItemChanges="CommittedVehicleChanges"
+                     Bordered="true" EditTrigger="DataGridEditTrigger.Manual">
+            <Columns>
+                <PropertyColumn Property="x => x.Name">
+                    <MudLink></MudLink>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.Year"/>
+                <PropertyColumn Property="x => x.Manufacturer"/>
+                <PropertyColumn Property="x => x.Model"/>
+                <PropertyColumn Property="x => x.FuelType" Title="Fuel Type">
+                    <EditTemplate>
+                        <MudSelect @bind-Value="context.Item.FuelType" Required RequiredError="You must select a fuel type."
+                                   Margin="Margin.Dense">
+                            @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
+                            {
+                                <MudSelectItem Value="@fuel">@fuel</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </EditTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.FuelCapacity" Title="Capacity"/>
+                <PropertyColumn Property="x => x.LicensePlate" Title="License Plate"/>
+                <PropertyColumn Property="x => x.VehicleIdentificationNumber" Title="VIN"/>
+                <PropertyColumn Property="x => x.Date" IsEditable="false"/>
+                <TemplateColumn Title="Details">
+                    <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Medium" OnClick="@context.Actions.StartEditingItem"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.More" Size="Size.Medium" OnClick="() => GotoVehicleDetail(context.Item.Id)"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.Build" Size="Size.Medium" OnClick="() => GotoNewService(context.Item.Id)"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.LocalGasStation" Size="Size.Medium" OnClick="() => GotoNewRefueling(context.Item.Id)"/>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudPaper>
+</MudContainer>
 
-<p>This shows cars</p>
+@code {
+    IEnumerable<Vehicle>? _vehicles;
 
-@if (_vehicles is null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
-}
-else
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Manufacturer</th>
-            <th>Model</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var vehicle in _vehicles)
-        {
-            <tr>
-                <td><a href="/Car/@vehicle!.Id">@vehicle.Name</a></td>
-                <td>@vehicle.Manufacturer</td>
-                <td>@vehicle.Model</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    void GotoVehicleDetail(int id)
+    {
+        NavigationManager.NavigateTo($"/car/{id}");
+    }
+
+    void GotoNewRefueling(int id)
+    {
+        NavigationManager.NavigateTo($"/car/{id}/refueling/new");
+    }
+
+    void GotoNewService(int id)
+    {
+        NavigationManager.NavigateTo($"/car/{id}/service/new");
+    }
+
+    async Task CommittedVehicleChanges(Vehicle vehicle)
+    {
+        await VehicleService.UpdateVehicleAsync(vehicle);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _vehicles = await VehicleService.GetAllVehiclesAsync();
+    }
 }
