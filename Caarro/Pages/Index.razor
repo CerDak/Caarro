@@ -61,7 +61,7 @@
 
     void GotoNewService(int id)
     {
-        return;
+        NavigationManager.NavigateTo($"/car/{id}/service/new");
     }
 
     async Task CommittedVehicleChanges(Vehicle vehicle)
