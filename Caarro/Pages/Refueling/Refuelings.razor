@@ -17,7 +17,8 @@
             <TemplateColumn>
                 <CellTemplate>
                     <MudStack Row>
-                        <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(() => GotoRefuelingDetails(context.Item.Id))">
+                        <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary"
+                                   OnClick="() => GotoRefuelingDetails(context.Item.Id)">
                             Details
                         </MudButton>
                     </MudStack>
