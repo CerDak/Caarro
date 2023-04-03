@@ -7,7 +7,7 @@ primary_region = "sjc"
 processes = []
 
 [env]
-  ASPNETCORE_FORWARDEDHEADERS_ENABLED = 1
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED = "true"
 
 [build]
   image = "registry.fly.io/caarro:latest"
