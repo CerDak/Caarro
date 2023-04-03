@@ -18,7 +18,8 @@
                     <MudNumericField T="int" HideSpinButtons Label="Fuel Amount" Required Min="0"
                                      RequiredError="You must specify how much fuel you bought!"/>
                     <MudCheckBox Size="Size.Small" Label="Full Tank" @bind-Checked="_refueling.ToFull"/>
-                    <MudTextField T="string" Label="Fueling Location" InputType="InputType.Text" @bind-Value="_refueling.Location"/>
+                    <MudTextField T="string" Label="Fueling Location" InputType="InputType.Text"
+                                  @bind-Value="_refueling.Location"/>
                     <MudTextField T="string" Label="Driver" InputType="InputType.Text" @bind-Value="_refueling.Driver"/>
                     <MudSelect T="FuelType" @bind-Value="_refueling.Fuel">
                         @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
@@ -30,7 +31,7 @@
             </MudForm>
             <MudCardActions>
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
-                           OnClick="@(async () => await Submit())">Add</MudButton>
+                           OnClick="async () => await Submit()">Add</MudButton>
             </MudCardActions>
         </MudCard>
     </MudGrid>
