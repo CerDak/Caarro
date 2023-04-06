@@ -15,12 +15,12 @@
                                      RequiredError="Odometer reading is required!" @bind-Value="_refueling.Odometer"/>
                     <MudNumericField T="double" HideSpinButtons Format="F2" Label="Price" Required Min="0"
                                      RequiredError="Refueling price is required!" @bind-Value="_refueling.Price"/>
-                    <MudNumericField T="int" HideSpinButtons Label="Fuel Amount" Required Min="0"
-                                     RequiredError="You must specify how much fuel you bought!"/>
-                    <MudCheckBox Size="Size.Small" Label="Full Tank" @bind-Checked="_refueling.ToFull"/>
-                    <MudTextField T="string" Label="Fueling Location" InputType="InputType.Text"
+                    <MudNumericField T="double" HideSpinButtons Label="Fuel Amount" Required Min="0"
+                                     RequiredError="You must specify how much fuel you bought!" @bind-Value="_refueling.FuelAmount"/>
+                    <MudCheckBox Size="Size.Small" Label="Partial Tank" @bind-Checked="_refueling.ToFull"/>
+                    <MudTextField T="string?" Label="Fueling Location" InputType="InputType.Text"
                                   @bind-Value="_refueling.Location"/>
-                    <MudTextField T="string" Label="Driver" InputType="InputType.Text" @bind-Value="_refueling.Driver"/>
+                    <MudTextField T="string?" Label="Driver" InputType="InputType.Text" @bind-Value="_refueling.Driver"/>
                     <MudSelect T="FuelType" @bind-Value="_refueling.Fuel">
                         @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
                         {
@@ -45,7 +45,7 @@
 
     bool _success;
     string[] _errors = { };
-    MudForm _form;
+    MudForm _form = default!;
 
     async Task Submit()
     {
@@ -54,6 +54,7 @@
         if (_form.IsValid)
         {
             _refueling.VehicleId = CarId;
+            _refueling.ToFull = !_refueling.ToFull;
             await RefuelingService.AddRefuelingAsync(_refueling);
             NavigationManager.NavigateTo("/");
         }
