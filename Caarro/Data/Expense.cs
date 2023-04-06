@@ -15,5 +15,4 @@ public class Expense : BaseEntity
     public double Amount { get; set; }
 
     public int VehicleId { get; set; }
-    public Vehicle Vehicle { get; set; }
 }

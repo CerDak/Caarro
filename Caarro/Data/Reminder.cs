@@ -10,5 +10,4 @@ public class Reminder : BaseEntity
     public ServiceType Service { get; set; }
 
     public int VehicleId { get; set; }
-    public Vehicle Vehicle { get; set; }
 }
