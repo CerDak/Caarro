@@ -39,16 +39,25 @@
                         <MudIconButton Icon="@Icons.Material.Filled.More" Size="Size.Medium" OnClick="() => GotoVehicleDetail(context.Item.Id)"/>
                         <MudIconButton Icon="@Icons.Material.Filled.Build" Size="Size.Medium" OnClick="() => GotoNewService(context.Item.Id)"/>
                         <MudIconButton Icon="@Icons.Material.Filled.LocalGasStation" Size="Size.Medium" OnClick="() => GotoNewRefueling(context.Item.Id)"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.Schedule" Size="Size.Medium" OnClick="() => GotoNewReminder(context.Item.Id)"/>
                     </CellTemplate>
                 </TemplateColumn>
             </Columns>
         </MudDataGrid>
+    </MudPaper>
+    <MudPaper Elevation="0" Style="margin-top: 15px">
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.DirectionsCar" Label="New Vehicle" OnClick="GotoNewVehicle"/>
     </MudPaper>
 </MudContainer>
 
 @code {
     IEnumerable<Vehicle>? _vehicles;
 
+    void GotoNewVehicle()
+    {
+        NavigationManager.NavigateTo("/car/new");
+    }
+    
     void GotoVehicleDetail(int id)
     {
         NavigationManager.NavigateTo($"/car/{id}");
@@ -57,6 +66,11 @@
     void GotoNewRefueling(int id)
     {
         NavigationManager.NavigateTo($"/car/{id}/refueling/new");
+    }
+
+    void GotoNewReminder(int id)
+    {
+        NavigationManager.NavigateTo($"/car/{id}/reminder/new");
     }
 
     void GotoNewService(int id)
