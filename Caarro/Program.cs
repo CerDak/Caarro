@@ -13,6 +13,8 @@ using OpenTelemetry.Metrics;
 
 using Prometheus;
 
+using Quartz;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -34,8 +36,21 @@ builder.Services.AddOpenTelemetry()
 builder.Services.AddHealthChecks()
     .AddSqlite(builder.Configuration.GetConnectionString("Sqlite")!);
 
-builder.Services.AddMudServices();
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+});
+builder.Services.AddQuartzServer(q =>
+{
+    q.WaitForJobsToComplete = true;
+});
 
+builder.Services.AddDbContext<CaarroDbContext>(db =>
+{
+    db.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
+});
+
+builder.Services.AddMudServices();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
@@ -43,11 +58,7 @@ builder.Services.AddServerSideBlazor()
 builder.Services.AddScoped<RefuelingService>();
 builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<VehicleService>();
-
-builder.Services.AddDbContext<CaarroDbContext>(db =>
-{
-    db.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
-});
+builder.Services.AddScoped<ReminderService>();
 
 var app = builder.Build();
 

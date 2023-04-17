@@ -8,6 +8,8 @@ public class Reminder : BaseEntity
     public TimeSpan? ReminderPeriodTime { get; set; }
     public int? ReminderPeriodDistance { get; set; }
     public ServiceType Service { get; set; }
+    public string? ContactEmail { get; set; }
 
     public int VehicleId { get; set; }
+    public Guid JobId { get; set; }
 }
