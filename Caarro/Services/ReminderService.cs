@@ -33,14 +33,34 @@ public class ReminderService
         return await _db.Reminders.SingleOrDefaultAsync(r => r.Id == id);
     }
 
+    public async Task<IEnumerable<Reminder>> GetReminderUnderDistanceAsync(int vehicleId, int distance)
+    {
+        return await _db.Reminders.Where(r => r.VehicleId == vehicleId && distance >= r.ReminderPeriodDistance).ToListAsync();
+    }
+
     public async Task AddReminderAsync(Reminder reminder)
+    {
+        switch (reminder)
+        {
+            case { ReminderPeriodDistance: not null, ReminderPeriodTime: null }:
+                await PersistDistanceReminder(reminder);
+                return;
+            case { ReminderPeriodDistance: null, ReminderPeriodTime: not null }:
+                await PersistTimeReminder(reminder);
+                return;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private async Task PersistTimeReminder(Reminder reminder)
     {
         await using var transaction = await _db.Database.BeginTransactionAsync();
 
         var scheduler = await _scheduler.GetScheduler();
 
         var guid = Guid.NewGuid();
-        reminder.Date = DateTime.Now;
+        reminder.Date = DateTime.UtcNow;
         reminder.Active = true;
         reminder.JobId = guid;
 
@@ -74,10 +94,9 @@ public class ReminderService
         }
         catch (Exception e)
         {
-            //var jobKey = new JobKey(guid.ToString(), reminder.VehicleId.ToString());
-            var deleteJob = await scheduler.DeleteJob(jobKey);
+            var jobDeleted = await scheduler.DeleteJob(jobKey);
 
-            if (deleteJob is false)
+            if (jobDeleted is false)
             {
                 _logger.LogCritical("Failed to delete job {jobId} on {vehicleId}",
                     guid, reminder.VehicleId);
@@ -87,6 +106,16 @@ public class ReminderService
 
             throw;
         }
+    }
+
+    private async Task PersistDistanceReminder(Reminder reminder)
+    {
+        reminder.Date = DateTime.UtcNow;
+        reminder.Active = true;
+        reminder.JobId = Guid.Empty;
+
+        _db.Reminders.Add(reminder);
+        await _db.SaveChangesAsync();
     }
 
     public async Task DeleteReminderAsync(Reminder reminder)

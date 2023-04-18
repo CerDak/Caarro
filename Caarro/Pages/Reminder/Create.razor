@@ -1,0 +1,64 @@
+@page "/car/{CarId:int}/reminder/new"
+@using Caarro.Data
+@using Caarro.Services
+@inject NavigationManager NavigationManager
+@inject ReminderService ReminderService
+@inject AuthenticationStateProvider AuthState
+
+<PageTitle>Caarro - New Reminder</PageTitle>
+
+<MudContainer>
+    <MudGrid>
+        <MudCard>
+            <MudForm Model="@_reminder" @ref="_form" @bind-IsValid="@_success" @bind-Errors="@_errors">
+                <MudCardContent>
+                    <MudSelect T="ServiceType" @bind-Value="_reminder.Service">
+                        @foreach (ServiceType type in Enum.GetValues(typeof(ServiceType)))
+                        {
+                            <MudSelectItem Value="@type"/>
+                        }
+                    </MudSelect>
+                    <MudSwitch @bind-Checked="_switch">
+                        <MudNumericField T="int?" Disabled="@_switch" HideSpinButtons @bind-Value="_reminder.ReminderPeriodDistance"/>
+                        <MudDatePicker T="DateTime?" Disabled="@(!_switch)" @bind-Date="_eventDate"/>
+                    </MudSwitch>
+                </MudCardContent>
+            </MudForm>
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                           OnClick="async () => await Submit()">Add</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+
+    DateTime? _eventDate;
+    Reminder _reminder = new();
+
+    bool _switch;
+    bool _success;
+    string[] _errors = { };
+    MudForm _form = default!;
+
+    async Task Submit()
+    {
+        await _form.Validate();
+
+        if (_form.IsValid)
+        {
+            if (_eventDate is not null)
+            {
+                _reminder.ReminderPeriodTime = _eventDate.Value.ToUniversalTime() - DateTime.UtcNow;
+            }
+            _reminder.VehicleId = CarId;
+            _reminder.ContactEmail = AuthState.GetAuthenticationStateAsync().Result.User.Identity!.Name!;
+
+            await ReminderService.AddReminderAsync(_reminder);
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

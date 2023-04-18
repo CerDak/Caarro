@@ -48,6 +48,10 @@ builder.Services.AddQuartzServer(q =>
 builder.Services.AddDbContext<CaarroDbContext>(db =>
 {
     db.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
+    db.UseTriggers(trigger =>
+    {
+        trigger.AddTrigger<SendDistanceNotification>();
+    });
 });
 
 builder.Services.AddMudServices();

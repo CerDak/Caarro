@@ -1,0 +1,49 @@
+@page "/reminder/{CarId:int}"
+@using Caarro.Data
+@using Caarro.Services
+@using Microsoft.Extensions.Logging
+@inject NavigationManager _NavigationManager
+@inject ReminderService _ReminderService
+@inject ILogger<Reminder> _Log
+
+<PageTitle>Caarro - Reminders</PageTitle>
+
+<MudContainer>
+    <MudDataGrid Items="@_reminders" Filterable SortMode="SortMode.None" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="x => x.Service"/>
+            <PropertyColumn Property="x => x.ContactEmail"/>
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudStack Row>
+                        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Warning"
+                                   OnClick="async () => await DeleteReminder(context.Item)">Delete</MudButton>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" OnClick="NewReminder">New Reminder</MudButton>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+
+    private IEnumerable<Reminder>? _reminders;
+
+    void NewReminder()
+    {
+        _NavigationManager.NavigateTo($"/reminder/{CarId}/new");
+    }
+
+    async Task DeleteReminder(Reminder reminder)
+    {
+        await _ReminderService.DeleteReminderAsync(reminder);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _reminders = await _ReminderService.GetAllRemindersAsync(CarId);
+    }
+}
