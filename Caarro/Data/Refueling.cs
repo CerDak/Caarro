@@ -12,6 +12,7 @@ public class Refueling : BaseEntity
     public bool ToFull { get; set; }
     public string? Location { get; set; }
     public string? Driver { get; set; }
+    public double FuelEconomy { get; set; }
 
     public int VehicleId { get; set; }
 }

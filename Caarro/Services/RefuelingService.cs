@@ -27,6 +27,16 @@ public class RefuelingService
 
     public async Task AddRefuelingAsync(Refueling refueling)
     {
+        var old = await _db.Refueling.Where(r => r.VehicleId == refueling.VehicleId).OrderByDescending(o => o.Id).FirstOrDefaultAsync();
+        if (old is not null)
+        {
+            refueling.FuelEconomy = (refueling.Odometer - old.Odometer) / refueling.FuelAmount;
+        }
+        else
+        {
+            refueling.FuelEconomy = 0;
+        }
+
         refueling.Date = DateTime.Now;
         refueling.Active = true;
 
