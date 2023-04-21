@@ -27,7 +27,10 @@ public class RefuelingService
 
     public async Task AddRefuelingAsync(Refueling refueling)
     {
-        var old = await _db.Refueling.Where(r => r.VehicleId == refueling.VehicleId).OrderByDescending(o => o.Id).FirstOrDefaultAsync();
+        var old = await _db.Refueling
+            .FromSqlInterpolated(
+                $"SELECT * FROM Refueling WHERE VehicleId = {refueling.VehicleId} ORDER BY ID DESC LIMIT 1")
+            .SingleOrDefaultAsync();
         if (old is not null)
         {
             refueling.FuelEconomy = (refueling.Odometer - old.Odometer) / refueling.FuelAmount;
@@ -41,6 +44,12 @@ public class RefuelingService
         refueling.Active = true;
 
         _db.Refueling.Add(refueling);
+        await _db.SaveChangesAsync();
+
+        var x = await _db.Refueling.Select(f => f.FuelEconomy).AverageAsync();
+        var v = await _db.Vehicles.Where(v => v.Id == refueling.VehicleId).SingleOrDefaultAsync();
+        v!.AverageFuelEconomy = x;
+        _db.Vehicles.Update(v);
         await _db.SaveChangesAsync();
     }
 
