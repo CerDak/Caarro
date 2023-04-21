@@ -12,6 +12,7 @@ public class Vehicle : BaseEntity
     public int? Year { get; set; }
     public string? VehicleIdentificationNumber { get; set; }
     public double? FuelCapacity { get; set; }
+    public double? AverageFuelEconomy { get; set; }
     public FuelType FuelType { get; set; }
     public UnitOfMeasure UnitOfMeasure { get; set; }
 
