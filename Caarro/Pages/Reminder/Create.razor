@@ -57,7 +57,7 @@
             _reminder.VehicleId = CarId;
             _reminder.ContactEmail = AuthState.GetAuthenticationStateAsync().Result.User.Identity!.Name!;
 
-            await ReminderService.AddReminderAsync(_reminder);
+            await ReminderService.AddReminderAsync(_reminder, CancellationToken);
             NavigationManager.NavigateTo("/");
         }
     }

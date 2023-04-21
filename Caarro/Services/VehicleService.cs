@@ -17,38 +17,38 @@ public class VehicleService
         _db = db;
     }
 
-    public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync()
+    public async Task<IEnumerable<Vehicle>> GetAllVehiclesAsync(CancellationToken ct)
     {
-        return await _db.Vehicles.Where(v => v.Active == true).ToListAsync();
+        return await _db.Vehicles.Where(v => v.Active == true).ToListAsync(ct);
     }
 
-    public async Task<Vehicle?> GetVehicleAsync(int id)
+    public async Task<Vehicle?> GetVehicleAsync(int id, CancellationToken ct)
     {
-        return await _db.Vehicles.SingleOrDefaultAsync(v => v.Id == id);
+        return await _db.Vehicles.SingleOrDefaultAsync(v => v.Id == id, ct);
     }
 
-    public async Task AddVehicleAsync(Vehicle vehicle)
+    public async Task AddVehicleAsync(Vehicle vehicle, CancellationToken ct)
     {
         vehicle.Date = DateTime.Now;
         vehicle.Active = true;
 
         var e = _db.Vehicles.Add(vehicle);
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
     }
 
-    public async Task DeleteVehicleAsync(Vehicle vehicle)
+    public async Task DeleteVehicleAsync(Vehicle vehicle, CancellationToken ct)
     {
-        var car = await _db.Vehicles.SingleOrDefaultAsync(v => v.Id == vehicle.Id);
+        var car = await _db.Vehicles.SingleOrDefaultAsync(v => v.Id == vehicle.Id, ct);
         if (car is not null)
         {
             car.Active = false;
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(ct);
         }
     }
 
-    public async Task UpdateVehicleAsync(Vehicle vehicle)
+    public async Task UpdateVehicleAsync(Vehicle vehicle, CancellationToken ct)
     {
         _db.Vehicles.Update(vehicle);
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
     }
 }

@@ -51,7 +51,7 @@
         if (_form.IsValid)
         {
             _service.VehicleId = CarId;
-            await ServicesService.AddServiceAsync(_service);
+            await ServicesService.AddServiceAsync(_service, CancellationToken);
             NavigationManager.NavigateTo("/");
         }
     }

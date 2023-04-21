@@ -45,6 +45,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _services = await _ServicesService.GetAllServicesAsync(CarId);
+        _services = await _ServicesService.GetAllServicesAsync(CarId, CancellationToken);
     }
 }

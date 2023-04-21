@@ -46,7 +46,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _refuelings = await RefuelingService.GetAllRefuelingsAsync(CarId);
-        _services = await ServicesService.GetAllServicesAsync(CarId);
+        _refuelings = await RefuelingService.GetAllRefuelingsAsync(CarId, CancellationToken);
+        _services = await ServicesService.GetAllServicesAsync(CarId, CancellationToken);
     }
 }

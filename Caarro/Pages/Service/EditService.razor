@@ -40,18 +40,18 @@ else
 
     private async Task SubmitServiceUpdate()
     {
-        await _ServicesService.UpdateServiceAsync(_service!);
+        await _ServicesService.UpdateServiceAsync(_service!, CancellationToken);
         _NavigationManager.NavigateTo($"/service/{CarId}/");
     }
 
     private async Task SubmitServiceDelete()
     {
-        await _ServicesService.DeleteServiceAsync(_service!);
+        await _ServicesService.DeleteServiceAsync(_service!, CancellationToken);
         _NavigationManager.NavigateTo($"/service/{CarId}/");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _service = await _ServicesService.GetServiceAsync(ServiceId);
+        _service = await _ServicesService.GetServiceAsync(ServiceId, CancellationToken);
     }
 }

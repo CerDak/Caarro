@@ -56,7 +56,7 @@
 
         if (_form.IsValid)
         {
-            await VehicleService.AddVehicleAsync(_vehicle);
+            await VehicleService.AddVehicleAsync(_vehicle, CancellationToken);
             NavigationManager.NavigateTo("/");
         }
     }

@@ -39,11 +39,11 @@
 
     async Task DeleteReminder(Reminder reminder)
     {
-        await _ReminderService.DeleteReminderAsync(reminder);
+        await _ReminderService.DeleteReminderAsync(reminder, CancellationToken);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _reminders = await _ReminderService.GetAllRemindersAsync(CarId);
+        _reminders = await _ReminderService.GetAllRemindersAsync(CarId, CancellationToken);
     }
 }

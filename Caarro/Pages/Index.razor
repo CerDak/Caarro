@@ -81,11 +81,11 @@
 
     async Task CommittedVehicleChanges(Vehicle vehicle)
     {
-        await VehicleService.UpdateVehicleAsync(vehicle);
+        await VehicleService.UpdateVehicleAsync(vehicle, CancellationToken);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _vehicles = await VehicleService.GetAllVehiclesAsync();
+        _vehicles = await VehicleService.GetAllVehiclesAsync(CancellationToken);
     }
 }

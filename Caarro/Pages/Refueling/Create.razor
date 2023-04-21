@@ -55,7 +55,7 @@
         {
             _refueling.VehicleId = CarId;
             _refueling.ToFull = !_refueling.ToFull;
-            await RefuelingService.AddRefuelingAsync(_refueling);
+            await RefuelingService.AddRefuelingAsync(_refueling, CancellationToken);
             NavigationManager.NavigateTo("/");
         }
     }

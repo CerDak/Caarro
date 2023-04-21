@@ -21,17 +21,18 @@ public class SendDistanceNotification : IAfterSaveTrigger<Refueling>
     
     public async Task AfterSave(ITriggerContext<Refueling> context, CancellationToken cancellationToken)
     {
-        var triggeredReminders = await _reminderService.GetReminderUnderDistanceAsync(context.Entity.VehicleId, context.Entity.Odometer);
+        var triggeredReminders = await _reminderService.
+            GetReminderUnderDistanceAsync(context.Entity.VehicleId, context.Entity.Odometer, cancellationToken);
         
         // This could become quadratic :/
         foreach (var reminder in triggeredReminders)
         {
-            var vehicle = await _vehicleService.GetVehicleAsync(reminder.VehicleId);
+            var vehicle = await _vehicleService.GetVehicleAsync(reminder.VehicleId, cancellationToken);
 
             _log.LogCritical("ATTN: {email} - Vehicle {vehicle} / {name} upcoming service: {service}",
                 reminder.ContactEmail, reminder.VehicleId, vehicle!.Name, reminder.Service.ToString());
             
-            await _reminderService.DeleteReminderAsync(reminder);
+            await _reminderService.DeleteReminderAsync(reminder, cancellationToken);
         }
     }
 }

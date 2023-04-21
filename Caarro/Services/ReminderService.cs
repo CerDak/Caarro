@@ -23,41 +23,43 @@ public class ReminderService
         _scheduler = scheduler;
     }
 
-    public async Task<IEnumerable<Reminder>> GetAllRemindersAsync(int carId)
+    public async Task<IEnumerable<Reminder>> GetAllRemindersAsync(int carId, CancellationToken ct)
     {
-        return await _db.Reminders.Where(r => r.VehicleId == carId && r.Active == true).ToListAsync();
+        return await _db.Reminders.Where(r => r.VehicleId == carId && r.Active == true).ToListAsync(ct);
     }
 
-    public async Task<Reminder?> GetReminderAsync(int id)
+    public async Task<Reminder?> GetReminderAsync(int id, CancellationToken ct)
     {
-        return await _db.Reminders.SingleOrDefaultAsync(r => r.Id == id);
+        return await _db.Reminders.SingleOrDefaultAsync(r => r.Id == id, ct);
     }
 
-    public async Task<IEnumerable<Reminder>> GetReminderUnderDistanceAsync(int vehicleId, int distance)
+    public async Task<IEnumerable<Reminder>> GetReminderUnderDistanceAsync(int vehicleId, int distance, CancellationToken ct)
     {
-        return await _db.Reminders.Where(r => r.VehicleId == vehicleId && distance >= r.ReminderPeriodDistance).ToListAsync();
+        return await _db.Reminders
+            .Where(r => r.VehicleId == vehicleId && distance >= r.ReminderPeriodDistance)
+            .ToListAsync(ct);
     }
 
-    public async Task AddReminderAsync(Reminder reminder)
+    public async Task AddReminderAsync(Reminder reminder, CancellationToken ct)
     {
         switch (reminder)
         {
             case { ReminderPeriodDistance: not null, ReminderPeriodTime: null }:
-                await PersistDistanceReminder(reminder);
+                await PersistDistanceReminder(reminder, ct);
                 return;
             case { ReminderPeriodDistance: null, ReminderPeriodTime: not null }:
-                await PersistTimeReminder(reminder);
+                await PersistTimeReminder(reminder, ct);
                 return;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    private async Task PersistTimeReminder(Reminder reminder)
+    private async Task PersistTimeReminder(Reminder reminder, CancellationToken ct)
     {
-        await using var transaction = await _db.Database.BeginTransactionAsync();
+        await using var transaction = await _db.Database.BeginTransactionAsync(ct);
 
-        var scheduler = await _scheduler.GetScheduler();
+        var scheduler = await _scheduler.GetScheduler(ct);
 
         var guid = Guid.NewGuid();
         reminder.Date = DateTime.UtcNow;
@@ -75,7 +77,7 @@ public class ReminderService
             var date = now.Plus(dur).InZone(timeZone).ToDateTimeOffset();
 
             var entry = _db.Reminders.Add(reminder);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(ct);
 
             var job = JobBuilder.Create<SendNotificationJob>()
                 .UsingJobData("reminderId", entry.Entity.Id)
@@ -88,9 +90,9 @@ public class ReminderService
                 .StartAt(date)
                 .Build();
 
-            await scheduler.ScheduleJob(job, trigger);
+            await scheduler.ScheduleJob(job, trigger, ct);
 
-            await transaction.CommitAsync();
+            await transaction.CommitAsync(ct);
         }
         catch (Exception e)
         {
@@ -108,31 +110,31 @@ public class ReminderService
         }
     }
 
-    private async Task PersistDistanceReminder(Reminder reminder)
+    private async Task PersistDistanceReminder(Reminder reminder, CancellationToken ct)
     {
         reminder.Date = DateTime.UtcNow;
         reminder.Active = true;
         reminder.JobId = Guid.Empty;
 
         _db.Reminders.Add(reminder);
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
     }
 
-    public async Task DeleteReminderAsync(Reminder reminder)
+    public async Task DeleteReminderAsync(Reminder reminder, CancellationToken ct)
     {
-        var x = await _db.Reminders.SingleOrDefaultAsync(r => r.Id == reminder.Id);
+        var x = await _db.Reminders.SingleOrDefaultAsync(r => r.Id == reminder.Id, ct);
         if (x is not null)
         {
-            await using var transaction = await _db.Database.BeginTransactionAsync();
-            var scheduler = await _scheduler.GetScheduler();
+            await using var transaction = await _db.Database.BeginTransactionAsync(ct);
+            var scheduler = await _scheduler.GetScheduler(ct);
             JobKey jobKey = new(reminder.JobId.ToString(), reminder.VehicleId.ToString());
 
             try
             {
                 _db.Reminders.Remove(x);
-                await scheduler.DeleteJob(jobKey);
-                await _db.SaveChangesAsync();
-                await transaction.CommitAsync();
+                await scheduler.DeleteJob(jobKey, ct);
+                await _db.SaveChangesAsync(ct);
+                await transaction.CommitAsync(ct);
             }
             catch (Exception e)
             {
@@ -146,10 +148,10 @@ public class ReminderService
         }
     }
 
-    public async Task UpdateReminderAsync(Reminder reminder)
+    public async Task UpdateReminderAsync(Reminder reminder, CancellationToken ct)
     {
         _db.Reminders.Update(reminder);
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
     }
 }
 
@@ -170,11 +172,11 @@ internal class SendNotificationJob : IJob
     {
         context.MergedJobDataMap.TryGetIntValue("reminderId", out int reminderId);
 
-        var reminder = await _reminderService.GetReminderAsync(reminderId);
+        var reminder = await _reminderService.GetReminderAsync(reminderId, default);
 
         if (reminder is null) { throw new Exception("This shouldn't happen"); }
 
-        var vehicle = await _vehicleService.GetVehicleAsync(reminder.VehicleId);
+        var vehicle = await _vehicleService.GetVehicleAsync(reminder.VehicleId, default);
 
         if (vehicle is null) { throw new Exception("Vehicle no longer exists"); }
 

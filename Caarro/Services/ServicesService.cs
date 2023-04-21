@@ -15,39 +15,39 @@ public class ServicesService
         _db = db;
     }
 
-    public async Task<IEnumerable<Service>> GetAllServicesAsync(int carId)
+    public async Task<IEnumerable<Service>> GetAllServicesAsync(int carId, CancellationToken ct)
     {
-        return await _db.Services.Where(s => s.VehicleId == carId && s.Active == true).ToListAsync();
+        return await _db.Services.Where(s => s.VehicleId == carId && s.Active == true).ToListAsync(ct);
     }
 
-    public async Task<Service?> GetServiceAsync(int id)
+    public async Task<Service?> GetServiceAsync(int id, CancellationToken ct)
     {
-        return await _db.Services.SingleOrDefaultAsync(s => s.Id == id);
+        return await _db.Services.SingleOrDefaultAsync(s => s.Id == id, ct);
     }
 
-    public async Task AddServiceAsync(Service service)
+    public async Task AddServiceAsync(Service service, CancellationToken ct)
     {
         service.Date = DateTime.Now;
         service.Active = true;
 
         _db.Services.Add(service);
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
     }
 
-    public async Task DeleteServiceAsync(Service service)
+    public async Task DeleteServiceAsync(Service service, CancellationToken ct)
     {
-        var x = await _db.Services.SingleOrDefaultAsync(s => s.Id == service.Id);
+        var x = await _db.Services.SingleOrDefaultAsync(s => s.Id == service.Id, ct);
         if (x is not null)
         {
             x.Active = false;
             _db.Services.Update(x);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(ct);
         }
     }
 
-    public async Task UpdateServiceAsync(Service service)
+    public async Task UpdateServiceAsync(Service service, CancellationToken ct)
     {
         _db.Services.Update(service);
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
     }
 }

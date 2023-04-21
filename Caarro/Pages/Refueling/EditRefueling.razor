@@ -43,19 +43,19 @@ else
 
     private async Task SubmitRefuelingUpdate()
     {
-        await _RefuelingService.UpdateRefuelingAsync(_refueling!);
+        await _RefuelingService.UpdateRefuelingAsync(_refueling!, CancellationToken);
         _NavigationManager.NavigateTo($"/refueling/{CarId}/");
     }
 
     private async Task SubmitRefuelingDelete()
     {
-        await _RefuelingService.DeleteRefuelingAsync(_refueling!);
+        await _RefuelingService.DeleteRefuelingAsync(_refueling!, CancellationToken);
         _NavigationManager.NavigateTo($"/refueling/{CarId}/");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _refueling = await _RefuelingService.GetRefuelingAsync(RefuelingId);
+        _refueling = await _RefuelingService.GetRefuelingAsync(RefuelingId, CancellationToken);
     }
 
 }
