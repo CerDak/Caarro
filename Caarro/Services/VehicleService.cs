@@ -1,4 +1,6 @@
-﻿using Caarro.Data;
+﻿using Azure.Core;
+
+using Caarro.Data;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -25,14 +27,13 @@ public class VehicleService
         return await _db.Vehicles.SingleOrDefaultAsync(v => v.Id == id);
     }
 
-    public async Task<int> AddVehicleAsync(Vehicle vehicle)
+    public async Task AddVehicleAsync(Vehicle vehicle)
     {
         vehicle.Date = DateTime.Now;
         vehicle.Active = true;
 
         var e = _db.Vehicles.Add(vehicle);
         await _db.SaveChangesAsync();
-        return e.Entity.Id;
     }
 
     public async Task DeleteVehicleAsync(Vehicle vehicle)
