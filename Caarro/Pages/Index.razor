@@ -30,9 +30,10 @@
                     </EditTemplate>
                 </PropertyColumn>
                 <PropertyColumn Property="x => x.FuelCapacity" Title="Capacity"/>
+                <PropertyColumn Property="x => x.AverageFuelEconomy" Title="Fuel Economy" IsEditable="false" Format="N1"/>
                 <PropertyColumn Property="x => x.LicensePlate" Title="License Plate"/>
                 <PropertyColumn Property="x => x.VehicleIdentificationNumber" Title="VIN"/>
-                <PropertyColumn Property="x => x.Date" IsEditable="false"/>
+                <PropertyColumn Property="x => x.Date" Title="Added On" IsEditable="false" Format="MM/dd/yyyy"/>
                 <TemplateColumn Title="Details">
                     <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Medium" OnClick="@context.Actions.StartEditingItem"/>
