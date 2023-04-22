@@ -31,8 +31,9 @@ public class VehicleService
     {
         vehicle.Date = DateTime.Now;
         vehicle.Active = true;
+        vehicle.AverageFuelEconomy = 0;
 
-        var e = _db.Vehicles.Add(vehicle);
+        _db.Vehicles.Add(vehicle);
         await _db.SaveChangesAsync(ct);
     }
 
