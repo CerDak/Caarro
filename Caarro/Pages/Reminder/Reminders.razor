@@ -8,23 +8,21 @@
 
 <PageTitle>Caarro - Reminders</PageTitle>
 
-<MudContainer>
-    <MudDataGrid Items="@_reminders" Filterable SortMode="SortMode.None" Groupable="false">
-        <Columns>
-            <PropertyColumn Property="x => x.Service"/>
-            <PropertyColumn Property="x => x.ContactEmail"/>
-            <TemplateColumn>
-                <CellTemplate>
-                    <MudStack Row>
-                        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Warning"
-                                   OnClick="async () => await DeleteReminder(context.Item)">Delete</MudButton>
-                    </MudStack>
-                </CellTemplate>
-            </TemplateColumn>
-        </Columns>
-    </MudDataGrid>
-    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" OnClick="NewReminder">New Reminder</MudButton>
-</MudContainer>
+<MudDataGrid Items="@_reminders" Filterable SortMode="SortMode.None" Groupable="false">
+    <Columns>
+        <PropertyColumn Property="x => x.Service"/>
+        <PropertyColumn Property="x => x.ContactEmail"/>
+        <TemplateColumn>
+            <CellTemplate>
+                <MudStack Row>
+                    <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Warning"
+                               OnClick="async () => await DeleteReminder(context.Item)">Delete</MudButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
+<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" OnClick="NewReminder">New Reminder</MudButton>
 
 @code {
     [Parameter]

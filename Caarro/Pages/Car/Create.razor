@@ -6,42 +6,38 @@
 
 <PageTitle>Caarro - New Vehicle</PageTitle>
 
-<MudContainer>
-    <MudGrid>
-        <MudCard>
-            <MudCardHeader>
-                <MudText Typo="Typo.h5">New Vehicle</MudText>
-            </MudCardHeader>
-            <MudForm Model="_vehicle" @ref="_form" bind-IsValid="_success" bind-Errors="_errors">
-                <MudCardContent>
-                    <MudTextField T="string" Label="Name" Required InputType="InputType.Text" @bind-Value="_vehicle.Name"/>
-                    <MudTextField T="string?" Label="Manufacturer" InputType="InputType.Text" @bind-Value="_vehicle.Manufacturer"/>
-                    <MudTextField T="string?" Label="Model" InputType="InputType.Text" @bind-Value="_vehicle.Model"/>
-                    <MudTextField T="string?" Label="License Plate" InputType="InputType.Text" @bind-Value="_vehicle.LicensePlate"/>
-                    <MudNumericField T="int?" Label="Year" Min="0" HideSpinButtons @bind-Value="_vehicle.Year"/>
-                    <MudTextField T="string?" Label="VIN" InputType="InputType.Text" @bind-Value="_vehicle.VehicleIdentificationNumber"/>
-                    <MudNumericField T="double?" Label="Fuel Capacity" HideSpinButtons/>
-                    <MudSelect T="FuelType" @bind-Value="_vehicle.FuelType">
-                        @foreach (FuelType type in Enum.GetValues(typeof(FuelType)))
-                        {
-                            <MudSelectItem Value="@type"/>
-                        }
-                    </MudSelect>
-                    <MudRadioGroup T="UnitOfMeasure" Required @bind-SelectedOption="_vehicle.UnitOfMeasure">
-                        @foreach (UnitOfMeasure uom in Enum.GetValues(typeof(UnitOfMeasure)))
-                        {
-                            <MudRadio T="UnitOfMeasure">@uom</MudRadio>
-                        }
-                    </MudRadioGroup>
-                </MudCardContent>
-            </MudForm>
-            <MudCardActions>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
-                           OnClick="async () => await Submit()">Add</MudButton>
-            </MudCardActions>
-        </MudCard>
-    </MudGrid>
-</MudContainer>
+<MudPaper>
+    <MudCardHeader>
+        <MudText Typo="Typo.h5">New Vehicle</MudText>
+    </MudCardHeader>
+    <MudForm Model="_vehicle" @ref="_form" bind-IsValid="_success" bind-Errors="_errors">
+        <MudCardContent>
+            <MudTextField T="string" Label="Name" Required InputType="InputType.Text" @bind-Value="_vehicle.Name"/>
+            <MudTextField T="string?" Label="Manufacturer" InputType="InputType.Text" @bind-Value="_vehicle.Manufacturer"/>
+            <MudTextField T="string?" Label="Model" InputType="InputType.Text" @bind-Value="_vehicle.Model"/>
+            <MudTextField T="string?" Label="License Plate" InputType="InputType.Text" @bind-Value="_vehicle.LicensePlate"/>
+            <MudNumericField T="int?" Label="Year" Min="0" HideSpinButtons @bind-Value="_vehicle.Year"/>
+            <MudTextField T="string?" Label="VIN" InputType="InputType.Text" @bind-Value="_vehicle.VehicleIdentificationNumber"/>
+            <MudNumericField T="double?" Label="Fuel Capacity" HideSpinButtons/>
+            <MudSelect T="FuelType" @bind-Value="_vehicle.FuelType">
+                @foreach (FuelType type in Enum.GetValues(typeof(FuelType)))
+                {
+                    <MudSelectItem Value="@type"/>
+                }
+            </MudSelect>
+            <MudRadioGroup T="UnitOfMeasure" Required @bind-SelectedOption="_vehicle.UnitOfMeasure">
+                @foreach (UnitOfMeasure uom in Enum.GetValues(typeof(UnitOfMeasure)))
+                {
+                    <MudRadio T="UnitOfMeasure">@uom</MudRadio>
+                }
+            </MudRadioGroup>
+        </MudCardContent>
+    </MudForm>
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                   OnClick="async () => await Submit()">Add</MudButton>
+    </MudCardActions>
+</MudPaper>
 
 @code {
     Vehicle _vehicle = new();

@@ -6,36 +6,34 @@
 
 <PageTitle>Caarro - Detail</PageTitle>
 
-<MudContainer>
-    <MudText Typo="Typo.h4">Fueling History:</MudText>
-    <MudPaper Elevation="1">
-        <MudDataGrid T="Refueling" Items="_refuelings" ReadOnly Bordered>
-            <Columns>
-                <PropertyColumn Property="x => x.Odometer"/>
-                <PropertyColumn Property="x => x.Price"/>
-                <PropertyColumn Property="x => x.FuelAmount" Title="Fuel Amount"/>
-                <PropertyColumn Property="x => x.ToFull"/>
-                <PropertyColumn Property="x => x.Driver"/>
-                <PropertyColumn Property="x => x.Location"/>
-                <PropertyColumn Property="x => x.Date"/>
-            </Columns>
-        </MudDataGrid>
-    </MudPaper>
+<MudPaper Elevation="3">
+    <MudText Typo="Typo.h4" Style="text-align: center">Fueling History</MudText>
+    <MudDataGrid T="Refueling" Items="_refuelings" ReadOnly Bordered Elevation="0">
+        <Columns>
+            <PropertyColumn Property="x => x.Odometer"/>
+            <PropertyColumn Property="x => x.Price"/>
+            <PropertyColumn Property="x => x.FuelAmount" Title="Fuel Amount"/>
+            <PropertyColumn Property="x => x.ToFull"/>
+            <PropertyColumn Property="x => x.Driver"/>
+            <PropertyColumn Property="x => x.Location"/>
+            <PropertyColumn Property="x => x.Date"/>
+        </Columns>
+    </MudDataGrid>
+</MudPaper>
 
-    <MudText Typo="Typo.h4">Service History:</MudText>
-    <MudPaper Elevation="1">
-        <MudDataGrid T="Service" Items="_services" ReadOnly Bordered>
-            <Columns>
-                <PropertyColumn Property="x => x.Odometer"/>
-                <PropertyColumn Property="x => x.Amount"/>
-                <PropertyColumn Property="x => x.Type"/>
-                <PropertyColumn Property="x => x.Driver"/>
-                <PropertyColumn Property="x => x.Location"/>
-                <PropertyColumn Property="x => x.Date"/>
-            </Columns>
-        </MudDataGrid>
-    </MudPaper>
-</MudContainer>
+<MudPaper Elevation="3" Style="margin-top: 1.5em">
+    <MudText Typo="Typo.h4" Style="text-align: center">Service History</MudText>
+    <MudDataGrid T="Service" Items="_services" ReadOnly Bordered Elevation="0">
+        <Columns>
+            <PropertyColumn Property="x => x.Odometer"/>
+            <PropertyColumn Property="x => x.Amount"/>
+            <PropertyColumn Property="x => x.Type"/>
+            <PropertyColumn Property="x => x.Driver"/>
+            <PropertyColumn Property="x => x.Location"/>
+            <PropertyColumn Property="x => x.Date"/>
+        </Columns>
+    </MudDataGrid>
+</MudPaper>
 
 @code {
     [Parameter]

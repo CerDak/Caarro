@@ -8,21 +8,17 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle"/>
-        <MudText Typo="Typo.h5" Class="ml-3" Color="Color.Inherit">Caarro</MudText>
+        <MudLink Href="/" Typo="Typo.h5" Class="ml-3" Color="Color.Inherit" Underline="Underline.None">Caarro</MudLink>
         <MudSpacer/>
         <LoginDisplay/>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        @*NavMenu*@
-    </MudDrawer>
     <MudMainContent>
-        @Body
+        <MudContainer MaxWidth="MaxWidth.Large" Style="margin-top: 1.5em">
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 
 @code {
-    bool _drawerOpen = false;
 
-    void DrawerToggle() => _drawerOpen = !_drawerOpen;
 }

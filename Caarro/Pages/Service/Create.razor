@@ -6,33 +6,29 @@
 
 <PageTitle>Caarro - New Service</PageTitle>
 
-<MudContainer>
-    <MudGrid>
-        <MudCard>
-            <MudForm Model="@_service" @ref="_form" @bind-IsValid="@_success" @bind-Errors="@_errors">
-                <MudCardContent>
-                    <MudNumericField T="int" HideSpinButtons Label="Odometer" Required Min="0"
-                                     RequiredError="Odometer reading is required!" @bind-Value="_service.Odometer"/>
-                    <MudSelect T="ServiceType" @bind-Value="_service.Type">
-                        @foreach (ServiceType type in Enum.GetValues(typeof(ServiceType)))
-                        {
-                            <MudSelectItem Value="@type"/>
-                        }
-                    </MudSelect>
-                    <MudNumericField T="double?" HideSpinButtons Format="F2" Label="Price" Required Min="0"
-                                     RequiredError="Service price is required!" @bind-Value="_service.Amount"/>
-                    <MudTextField T="string" Label="Service Location" InputType="InputType.Text"
-                                  @bind-Value="_service.Location"/>
-                    <MudTextField T="string" Label="Driver" InputType="InputType.Text" @bind-Value="_service.Driver"/>
-                </MudCardContent>
-            </MudForm>
-            <MudCardActions>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
-                           OnClick="async () => await Submit()">Add</MudButton>
-            </MudCardActions>
-        </MudCard>
-    </MudGrid>
-</MudContainer>
+<MudCard>
+    <MudForm Model="@_service" @ref="_form" @bind-IsValid="@_success" @bind-Errors="@_errors">
+        <MudCardContent>
+            <MudNumericField T="int" HideSpinButtons Label="Odometer" Required Min="0"
+                             RequiredError="Odometer reading is required!" @bind-Value="_service.Odometer"/>
+            <MudSelect T="ServiceType" @bind-Value="_service.Type">
+                @foreach (ServiceType type in Enum.GetValues(typeof(ServiceType)))
+                {
+                    <MudSelectItem Value="@type"/>
+                }
+            </MudSelect>
+            <MudNumericField T="double?" HideSpinButtons Format="F2" Label="Price" Required Min="0"
+                             RequiredError="Service price is required!" @bind-Value="_service.Amount"/>
+            <MudTextField T="string" Label="Service Location" InputType="InputType.Text"
+                          @bind-Value="_service.Location"/>
+            <MudTextField T="string" Label="Driver" InputType="InputType.Text" @bind-Value="_service.Driver"/>
+        </MudCardContent>
+    </MudForm>
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                   OnClick="async () => await Submit()">Add</MudButton>
+    </MudCardActions>
+</MudCard>
 
 @code {
     [Parameter]

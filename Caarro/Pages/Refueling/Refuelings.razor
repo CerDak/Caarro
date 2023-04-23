@@ -8,7 +8,7 @@
 
 <PageTitle>Caarro - Refueling</PageTitle>
 
-<MudContainer>
+<MudPaper>
     <MudDataGrid Items="@_refueling" Filterable="false" SortMode="SortMode.None" Groupable="false">
         <Columns>
             <PropertyColumn Property="x => x.Date"/>
@@ -25,7 +25,7 @@
         </Columns>
     </MudDataGrid>
     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" OnClick="NewRefueling">New Refueling</MudButton>
-</MudContainer>
+</MudPaper>
 
 @code {
     [Parameter]

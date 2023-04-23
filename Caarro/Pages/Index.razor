@@ -1,55 +1,70 @@
 ﻿@page "/"
 @using Caarro.Data
 @using Caarro.Services
+@using Color = MudBlazor.Color
+@using System.Drawing
+@using Size = MudBlazor.Size
 @inject NavigationManager NavigationManager
 @inject VehicleService VehicleService
 
 <PageTitle>Caarro</PageTitle>
 
-<MudContainer>
-    <MudPaper>
-        <MudDataGrid T="Vehicle" Items="@_vehicles" ReadOnly="false" Filterable="false" SortMode="SortMode.None"
-                     Groupable="false" EditMode="DataGridEditMode.Form" CommittedItemChanges="CommittedVehicleChanges"
-                     Bordered="true" EditTrigger="DataGridEditTrigger.Manual">
-            <Columns>
-                <PropertyColumn Property="x => x.Name">
-                    <MudLink></MudLink>
-                </PropertyColumn>
-                <PropertyColumn Property="x => x.Year"/>
-                <PropertyColumn Property="x => x.Manufacturer"/>
-                <PropertyColumn Property="x => x.Model"/>
-                <PropertyColumn Property="x => x.FuelType" Title="Fuel Type">
-                    <EditTemplate>
-                        <MudSelect @bind-Value="context.Item.FuelType" Required RequiredError="You must select a fuel type."
-                                   Margin="Margin.Dense">
-                            @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
-                            {
-                                <MudSelectItem Value="@fuel">@fuel</MudSelectItem>
-                            }
-                        </MudSelect>
-                    </EditTemplate>
-                </PropertyColumn>
-                <PropertyColumn Property="x => x.FuelCapacity" Title="Capacity"/>
-                <PropertyColumn Property="x => x.AverageFuelEconomy" Title="Fuel Economy" IsEditable="false" Format="N1"/>
-                <PropertyColumn Property="x => x.LicensePlate" Title="License Plate"/>
-                <PropertyColumn Property="x => x.VehicleIdentificationNumber" Title="VIN"/>
-                <PropertyColumn Property="x => x.Date" Title="Added On" IsEditable="false" Format="MM/dd/yyyy"/>
-                <TemplateColumn Title="Details">
-                    <CellTemplate>
-                        <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Medium" OnClick="@context.Actions.StartEditingItem"/>
-                        <MudIconButton Icon="@Icons.Material.Filled.More" Size="Size.Medium" OnClick="() => GotoVehicleDetail(context.Item.Id)"/>
-                        <MudIconButton Icon="@Icons.Material.Filled.Build" Size="Size.Medium" OnClick="() => GotoNewService(context.Item.Id)"/>
-                        <MudIconButton Icon="@Icons.Material.Filled.LocalGasStation" Size="Size.Medium" OnClick="() => GotoNewRefueling(context.Item.Id)"/>
-                        <MudIconButton Icon="@Icons.Material.Filled.Schedule" Size="Size.Medium" OnClick="() => GotoNewReminder(context.Item.Id)"/>
-                    </CellTemplate>
-                </TemplateColumn>
-            </Columns>
-        </MudDataGrid>
-    </MudPaper>
-    <MudPaper Elevation="0" Style="margin-top: 15px">
-        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.DirectionsCar" Label="New Vehicle" OnClick="GotoNewVehicle"/>
-    </MudPaper>
-</MudContainer>
+<MudPaper>
+    <MudDataGrid T="Vehicle" Items="@_vehicles" ReadOnly="false" Filterable="false" SortMode="SortMode.None"
+                 Groupable="false" EditMode="DataGridEditMode.Form" CommittedItemChanges="CommittedVehicleChanges"
+                 Bordered="true" EditTrigger="DataGridEditTrigger.Manual">
+        <Columns>
+            <PropertyColumn Property="x => x.Name">
+                <MudLink></MudLink>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.Year"/>
+            <PropertyColumn Property="x => x.Manufacturer"/>
+            <PropertyColumn Property="x => x.Model"/>
+            <PropertyColumn Property="x => x.FuelType" Title="Fuel Type">
+                <EditTemplate>
+                    <MudSelect @bind-Value="context.Item.FuelType" Required RequiredError="You must select a fuel type."
+                               Margin="Margin.Dense">
+                        @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
+                        {
+                            <MudSelectItem Value="@fuel">@fuel</MudSelectItem>
+                        }
+                    </MudSelect>
+                </EditTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.FuelCapacity" Title="Capacity"/>
+            <PropertyColumn Property="x => x.AverageFuelEconomy" Title="Fuel Economy" IsEditable="false" Format="N1"/>
+            <PropertyColumn Property="x => x.LicensePlate" Title="License Plate"/>
+            <PropertyColumn Property="x => x.VehicleIdentificationNumber" Title="VIN"/>
+            <PropertyColumn Property="x => x.Date" Title="Added On" IsEditable="false" Format="MM/dd/yyyy"/>
+            <TemplateColumn Title="Details">
+                <CellTemplate>
+                    <MudMenu Style="object-fit: cover;" FullWidth>
+                        <ActivatorContent>
+                            <MudFab Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" DisableElevation/>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem Style="object-fit: cover;" Icon="@Icons.Material.Filled.LocalGasStation"
+                                         OnClick="() => GotoNewRefueling(context.Item.Id)">Add Refueling</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Alarm"
+                                         OnClick="() => GotoNewReminder(context.Item.Id)">Add Reminder</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Plumbing"
+                                         OnClick="() => GotoNewService(context.Item.Id)">Add Service</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.More"
+                                         OnClick="() => GotoVehicleDetail(context.Item.Id)">Vehicle Details</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Edit"
+                                         OnClick="@context.Actions.StartEditingItem">Edit Vehicle</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.DeleteForever"
+                                         OnClick="() => GotoDeleteVehicle(context.Item.Id)">Delete Vehicle</MudMenuItem>
+                        </ChildContent>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+</MudPaper>
+<MudPaper Elevation="0" Style="margin-top: 1.5em">
+    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.DirectionsCar" Label="New Vehicle" OnClick="GotoNewVehicle"/>
+</MudPaper>
 
 @code {
     IEnumerable<Vehicle>? _vehicles;
@@ -57,6 +72,11 @@
     void GotoNewVehicle()
     {
         NavigationManager.NavigateTo("/car/new");
+    }
+    
+    private void GotoDeleteVehicle(int id)
+    {
+        NavigationManager.NavigateTo($"/car/{id}/delete");
     }
     
     void GotoVehicleDetail(int id)

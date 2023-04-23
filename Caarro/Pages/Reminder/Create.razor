@@ -7,30 +7,26 @@
 
 <PageTitle>Caarro - New Reminder</PageTitle>
 
-<MudContainer>
-    <MudGrid>
-        <MudCard>
-            <MudForm Model="@_reminder" @ref="_form" @bind-IsValid="@_success" @bind-Errors="@_errors">
-                <MudCardContent>
-                    <MudSelect T="ServiceType" @bind-Value="_reminder.Service">
-                        @foreach (ServiceType type in Enum.GetValues(typeof(ServiceType)))
-                        {
-                            <MudSelectItem Value="@type"/>
-                        }
-                    </MudSelect>
-                    <MudSwitch @bind-Checked="_switch">
-                        <MudNumericField T="int?" Disabled="@_switch" HideSpinButtons @bind-Value="_reminder.ReminderPeriodDistance"/>
-                        <MudDatePicker T="DateTime?" Disabled="@(!_switch)" @bind-Date="_eventDate"/>
-                    </MudSwitch>
-                </MudCardContent>
-            </MudForm>
-            <MudCardActions>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
-                           OnClick="async () => await Submit()">Add</MudButton>
-            </MudCardActions>
-        </MudCard>
-    </MudGrid>
-</MudContainer>
+<MudCard>
+    <MudForm Model="@_reminder" @ref="_form" @bind-IsValid="@_success" @bind-Errors="@_errors">
+        <MudCardContent>
+            <MudSelect T="ServiceType" @bind-Value="_reminder.Service">
+                @foreach (ServiceType type in Enum.GetValues(typeof(ServiceType)))
+                {
+                    <MudSelectItem Value="@type"/>
+                }
+            </MudSelect>
+            <MudSwitch @bind-Checked="_switch">
+                <MudNumericField T="int?" Disabled="@_switch" HideSpinButtons @bind-Value="_reminder.ReminderPeriodDistance"/>
+                <MudDatePicker T="DateTime?" Disabled="@(!_switch)" @bind-Date="_eventDate"/>
+            </MudSwitch>
+        </MudCardContent>
+    </MudForm>
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                   OnClick="async () => await Submit()">Add</MudButton>
+    </MudCardActions>
+</MudCard>
 
 @code {
     [Parameter]
