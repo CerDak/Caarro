@@ -1,0 +1,41 @@
+@page "/Car/{CarId:int}/delete"
+@using Caarro.Data
+@using Caarro.Services
+@inject VehicleService VehicleService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Caarro - Delete Vehicle</PageTitle>
+
+@if (_vehicle is not null)
+{
+    <MudPaper>
+        <MudText Typo="Typo.h3">Delete @_vehicleName?</MudText>
+    </MudPaper>
+    <MudPaper>
+        <MudIconButton Icon="@Icons.Material.Filled.DeleteForever" OnClick="async () => await DeleteVehicle()"/>
+    </MudPaper>
+}
+else
+{
+    <MudText Typo="Typo.h4">This vehicle doesn't exist. <MudLink Typo="Typo.h4" Href="/">Go back home?</MudLink></MudText>
+}
+
+@code {
+    [Parameter]
+    public int CarId { get; set; }
+
+    Vehicle? _vehicle;
+    string _vehicleName;
+
+    async Task DeleteVehicle()
+    {
+        await VehicleService.DeleteVehicleAsync(_vehicle!, CancellationToken);
+        NavigationManager.NavigateTo("/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _vehicle = await VehicleService.GetVehicleAsync(CarId, CancellationToken);
+        _vehicleName = string.IsNullOrEmpty(_vehicle?.Name) ? "Vehicle" : _vehicle.Name;
+    }
+}
