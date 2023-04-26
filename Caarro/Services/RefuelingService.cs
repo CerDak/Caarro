@@ -33,6 +33,11 @@ public class RefuelingService
             .SingleOrDefaultAsync(ct);
         if (old is not null)
         {
+            if (old.Odometer >= refueling.Odometer)
+            {
+                throw new ArgumentOutOfRangeException(nameof(refueling));
+            }
+
             refueling.FuelEconomy = (refueling.Odometer - old.Odometer) / refueling.FuelAmount;
         }
         else
@@ -44,11 +49,15 @@ public class RefuelingService
         refueling.Active = true;
 
         _db.Refueling.Add(refueling);
-        await _db.SaveChangesAsync(ct);
 
-        var x = await _db.Refueling.Select(f => f.FuelEconomy).AverageAsync(ct);
+        var lifetimeAvgFuelEco = await _db.Refueling
+            .Where(r => r.VehicleId == refueling.VehicleId)
+            .Select(f => f.FuelEconomy)
+            .AverageAsync(ct);
+        
         var v = await _db.Vehicles.Where(v => v.Id == refueling.VehicleId).SingleOrDefaultAsync(ct);
-        v!.AverageFuelEconomy = x;
+
+        v!.AverageFuelEconomy = lifetimeAvgFuelEco;
         _db.Vehicles.Update(v);
         await _db.SaveChangesAsync(ct);
     }
