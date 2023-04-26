@@ -28,9 +28,10 @@ public class RefuelingService
     public async Task AddRefuelingAsync(Refueling refueling, CancellationToken ct)
     {
         var old = await _db.Refueling
-            .FromSqlInterpolated(
-                $"SELECT * FROM Refueling WHERE VehicleId = {refueling.VehicleId} ORDER BY ID DESC LIMIT 1")
-            .SingleOrDefaultAsync(ct);
+            .Where(f => f.VehicleId == refueling.VehicleId)
+            .OrderByDescending(f => f.Id)
+            .FirstOrDefaultAsync(ct);
+
         if (old is not null)
         {
             if (old.Odometer >= refueling.Odometer)
