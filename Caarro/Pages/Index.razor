@@ -38,12 +38,12 @@
             <PropertyColumn Property="x => x.Date" Title="Added On" IsEditable="false" Format="MM/dd/yyyy"/>
             <TemplateColumn Title="Details">
                 <CellTemplate>
-                    <MudMenu Style="object-fit: cover;" FullWidth>
+                    <MudMenu>
                         <ActivatorContent>
                             <MudFab Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" DisableElevation/>
                         </ActivatorContent>
                         <ChildContent>
-                            <MudMenuItem Style="object-fit: cover;" Icon="@Icons.Material.Filled.LocalGasStation"
+                            <MudMenuItem Icon="@Icons.Material.Filled.LocalGasStation"
                                          OnClick="() => GotoNewRefueling(context.Item.Id)">Add Refueling</MudMenuItem>
                             <MudMenuItem Icon="@Icons.Material.Filled.Alarm"
                                          OnClick="() => GotoNewReminder(context.Item.Id)">Add Reminder</MudMenuItem>
@@ -53,7 +53,7 @@
                                          OnClick="() => GotoVehicleDetail(context.Item.Id)">Vehicle Details</MudMenuItem>
                             <MudMenuItem Icon="@Icons.Material.Filled.Edit"
                                          OnClick="@context.Actions.StartEditingItem">Edit Vehicle</MudMenuItem>
-                            <MudMenuItem Icon="@Icons.Material.Filled.DeleteForever"
+                            <MudMenuItem Style="" Icon="@Icons.Material.Filled.DeleteForever"
                                          OnClick="() => GotoDeleteVehicle(context.Item.Id)">Delete Vehicle</MudMenuItem>
                         </ChildContent>
                     </MudMenu>
