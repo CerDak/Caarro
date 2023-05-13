@@ -36,6 +36,11 @@ builder.Services.AddOpenTelemetry()
 builder.Services.AddHealthChecks()
     .AddSqlite(builder.Configuration.GetConnectionString("Sqlite")!);
 
+builder.Services.AddMetricServer(metrics =>
+{
+    metrics.Port = 9091;
+});
+
 builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
@@ -84,12 +89,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.MapHealthChecks("/healthz", new HealthCheckOptions
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapHealthChecks("/d47ea59a-d4ce-493a-8d67-e429d7d127ad/healthz", new HealthCheckOptions
 {
     AllowCachingResponses = false,
-});
+}).AllowAnonymous();
 
-app.UseMetricServer(9091);
 app.UseHttpMetrics();
 app.MapControllers();
 app.MapBlazorHub();
