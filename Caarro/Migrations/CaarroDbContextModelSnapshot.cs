@@ -58,7 +58,7 @@ namespace Caarro.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expenses", (string)null);
                 });
 
             modelBuilder.Entity("Caarro.Data.Income", b =>
@@ -96,7 +96,7 @@ namespace Caarro.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Income");
+                    b.ToTable("Income", (string)null);
                 });
 
             modelBuilder.Entity("Caarro.Data.Refueling", b =>
@@ -142,7 +142,7 @@ namespace Caarro.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Refueling");
+                    b.ToTable("Refueling", (string)null);
                 });
 
             modelBuilder.Entity("Caarro.Data.Reminder", b =>
@@ -179,7 +179,7 @@ namespace Caarro.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Reminders");
+                    b.ToTable("Reminders", (string)null);
                 });
 
             modelBuilder.Entity("Caarro.Data.Service", b =>
@@ -219,7 +219,7 @@ namespace Caarro.Migrations
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("Caarro.Data.Vehicle", b =>
@@ -267,7 +267,7 @@ namespace Caarro.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vehicles");
+                    b.ToTable("Vehicles", (string)null);
                 });
 
             modelBuilder.Entity("Caarro.Data.Expense", b =>
