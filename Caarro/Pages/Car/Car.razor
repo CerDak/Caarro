@@ -3,6 +3,7 @@
 @using Caarro.Services
 @inject RefuelingService RefuelingService
 @inject ServicesService ServicesService
+@inject VehicleService VehicleService
 
 <PageTitle>Caarro - Detail</PageTitle>
 
@@ -35,15 +36,58 @@
     </MudDataGrid>
 </MudPaper>
 
+<MudPaper Elevation="3" Style="margin-top: 1.5em">
+    <MudText Typo="Typo.h5" Style="text-align: center">Details</MudText>
+    <MudDataGrid T="Vehicle" Items="_vehicle" Bordered Elevation="0" ReadOnly="false" Filterable="false"
+                 SortMode="SortMode.None" Groupable="false" EditMode="DataGridEditMode.Form"
+                 CommittedItemChanges="CommittedVehicleChanges" EditTrigger="DataGridEditTrigger.Manual">
+        <Columns>
+            <PropertyColumn Property="x => x.Name"/>
+            <PropertyColumn Property="x => x.Year"/>
+            <PropertyColumn Property="x => x.Manufacturer"/>
+            <PropertyColumn Property="x => x.Model"/>
+            <PropertyColumn Property="x => x.FuelType" Title="Fuel Type">
+                <EditTemplate>
+                    <MudSelect @bind-Value="context.Item.FuelType" Required RequiredError="You must select a fuel type."
+                               Margin="Margin.Dense">
+                        @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
+                        {
+                            <MudSelectItem Value="@fuel">@fuel</MudSelectItem>
+                        }
+                    </MudSelect>
+                </EditTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.FuelCapacity" Title="Capacity"/>
+            <PropertyColumn Property="x => x.LicensePlate" Title="License Plate"/>
+            <PropertyColumn Property="x => x.VehicleIdentificationNumber" Title="VIN"/>
+            <PropertyColumn Property="x => x.Date" Title="Added On" IsEditable="false" Format="MM/dd/yyyy"/>
+            <TemplateColumn Title="Details">
+                <CellTemplate>
+                    <MudFab Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit"
+                            DisableElevation OnClick="@context.Actions.StartEditingItem"/>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+</MudPaper>
+
 @code {
     [Parameter]
     public int CarId { get; set; }
     
     IEnumerable<Refueling>? _refuelings;
     IEnumerable<Service>? _services;
+    Vehicle[] _vehicle = new Vehicle[1];
+    
+    async Task CommittedVehicleChanges(Vehicle vehicle)
+    {
+        await VehicleService.UpdateVehicleAsync(vehicle, CancellationToken);
+    }
 
     protected override async Task OnInitializedAsync()
     {
+        _vehicle[0] = await VehicleService.GetVehicleAsync(CarId, CancellationToken) ??
+                      throw new InvalidOperationException();
         _refuelings = await RefuelingService.GetAllRefuelingsAsync(CarId, CancellationToken);
         _services = await ServicesService.GetAllServicesAsync(CarId, CancellationToken);
     }

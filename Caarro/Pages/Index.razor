@@ -10,32 +10,14 @@
 <PageTitle>Caarro</PageTitle>
 
 <MudPaper>
-    <MudDataGrid T="Vehicle" Items="@_vehicles" ReadOnly="false" Filterable="false" SortMode="SortMode.None"
-                 Groupable="false" EditMode="DataGridEditMode.Form" CommittedItemChanges="CommittedVehicleChanges"
-                 Bordered="true" EditTrigger="DataGridEditTrigger.Manual">
+    <MudDataGrid T="Vehicle" Items="@_vehicles" ReadOnly Filterable="false" SortMode="SortMode.None" Groupable="false"
+                 Bordered="true">
         <Columns>
-            <PropertyColumn Property="x => x.Name">
-                <MudLink></MudLink>
-            </PropertyColumn>
+            <PropertyColumn Property="x => x.Name"/>
             <PropertyColumn Property="x => x.Year"/>
             <PropertyColumn Property="x => x.Manufacturer"/>
             <PropertyColumn Property="x => x.Model"/>
-            <PropertyColumn Property="x => x.FuelType" Title="Fuel Type">
-                <EditTemplate>
-                    <MudSelect @bind-Value="context.Item.FuelType" Required RequiredError="You must select a fuel type."
-                               Margin="Margin.Dense">
-                        @foreach (FuelType fuel in Enum.GetValues(typeof(FuelType)))
-                        {
-                            <MudSelectItem Value="@fuel">@fuel</MudSelectItem>
-                        }
-                    </MudSelect>
-                </EditTemplate>
-            </PropertyColumn>
-            <PropertyColumn Property="x => x.FuelCapacity" Title="Capacity"/>
-            <PropertyColumn Property="x => x.AverageFuelEconomy" Title="Fuel Economy" IsEditable="false" Format="N1"/>
-            <PropertyColumn Property="x => x.LicensePlate" Title="License Plate"/>
-            <PropertyColumn Property="x => x.VehicleIdentificationNumber" Title="VIN"/>
-            <PropertyColumn Property="x => x.Date" Title="Added On" IsEditable="false" Format="MM/dd/yyyy"/>
+            <PropertyColumn Property="x => x.AverageFuelEconomy" Title="Average Fuel Economy" IsEditable="false" Format="N1"/>
             <TemplateColumn Title="Details">
                 <CellTemplate>
                     <MudMenu>
@@ -51,8 +33,6 @@
                                          OnClick="() => GotoNewService(context.Item.Id)">Add Service</MudMenuItem>
                             <MudMenuItem Icon="@Icons.Material.Filled.More"
                                          OnClick="() => GotoVehicleDetail(context.Item.Id)">Vehicle Details</MudMenuItem>
-                            <MudMenuItem Icon="@Icons.Material.Filled.Edit"
-                                         OnClick="@context.Actions.StartEditingItem">Edit Vehicle</MudMenuItem>
                             <MudMenuItem Style="" Icon="@Icons.Material.Filled.DeleteForever"
                                          OnClick="() => GotoDeleteVehicle(context.Item.Id)">Delete Vehicle</MudMenuItem>
                         </ChildContent>
@@ -97,11 +77,6 @@
     void GotoNewService(int id)
     {
         NavigationManager.NavigateTo($"/car/{id}/service/new");
-    }
-
-    async Task CommittedVehicleChanges(Vehicle vehicle)
-    {
-        await VehicleService.UpdateVehicleAsync(vehicle, CancellationToken);
     }
 
     protected override async Task OnInitializedAsync()
