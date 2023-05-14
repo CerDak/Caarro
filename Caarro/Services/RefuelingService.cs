@@ -50,6 +50,7 @@ public class RefuelingService
         refueling.Active = true;
 
         _db.Refueling.Add(refueling);
+        await _db.SaveChangesAsync(ct);
 
         var lifetimeAvgFuelEco = await _db.Refueling
             .Where(r => r.VehicleId == refueling.VehicleId)
