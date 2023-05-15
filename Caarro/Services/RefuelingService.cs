@@ -27,41 +27,54 @@ public class RefuelingService
 
     public async Task AddRefuelingAsync(Refueling refueling, CancellationToken ct)
     {
-        var old = await _db.Refueling
-            .Where(f => f.VehicleId == refueling.VehicleId)
-            .OrderByDescending(f => f.Id)
-            .FirstOrDefaultAsync(ct);
+        await using var transaction = await _db.Database.BeginTransactionAsync(ct);
 
-        if (old is not null)
+        try
         {
-            if (old.Odometer >= refueling.Odometer)
+            var old = await _db.Refueling
+                .Where(f => f.VehicleId == refueling.VehicleId)
+                .OrderByDescending(f => f.Id)
+                .FirstOrDefaultAsync(ct);
+
+            if (old is not null)
             {
-                throw new ArgumentOutOfRangeException(nameof(refueling));
+                if (old.Odometer >= refueling.Odometer)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(refueling));
+                }
+
+                refueling.FuelEconomy = (refueling.Odometer - old.Odometer) / refueling.FuelAmount;
+            }
+            else
+            {
+                refueling.FuelEconomy = 0;
             }
 
-            refueling.FuelEconomy = (refueling.Odometer - old.Odometer) / refueling.FuelAmount;
+            refueling.Date = DateTime.Now;
+            refueling.Active = true;
+
+            _db.Refueling.Add(refueling);
+            await _db.SaveChangesAsync(ct);
+
+            var lifetimeAvgFuelEco = await _db.Refueling
+                .Where(r => r.VehicleId == refueling.VehicleId)
+                .Select(f => f.FuelEconomy)
+                .AverageAsync(ct);
+
+            var v = await _db.Vehicles.Where(v => v.Id == refueling.VehicleId).SingleOrDefaultAsync(ct);
+
+            v!.AverageFuelEconomy = lifetimeAvgFuelEco;
+            _db.Vehicles.Update(v);
+            await _db.SaveChangesAsync(ct);
+
+            await transaction.CommitAsync(ct);
         }
-        else
+        catch
         {
-            refueling.FuelEconomy = 0;
+            await transaction.RollbackAsync(ct);
+
+            throw;
         }
-
-        refueling.Date = DateTime.Now;
-        refueling.Active = true;
-
-        _db.Refueling.Add(refueling);
-        await _db.SaveChangesAsync(ct);
-
-        var lifetimeAvgFuelEco = await _db.Refueling
-            .Where(r => r.VehicleId == refueling.VehicleId)
-            .Select(f => f.FuelEconomy)
-            .AverageAsync(ct);
-        
-        var v = await _db.Vehicles.Where(v => v.Id == refueling.VehicleId).SingleOrDefaultAsync(ct);
-
-        v!.AverageFuelEconomy = lifetimeAvgFuelEco;
-        _db.Vehicles.Update(v);
-        await _db.SaveChangesAsync(ct);
     }
 
     public async Task DeleteRefuelingAsync(Refueling refueling, CancellationToken ct)
