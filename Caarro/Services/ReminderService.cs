@@ -94,7 +94,7 @@ public class ReminderService
 
             await transaction.CommitAsync(ct);
         }
-        catch (Exception e)
+        catch
         {
             var jobDeleted = await scheduler.DeleteJob(jobKey);
 
@@ -136,7 +136,7 @@ public class ReminderService
                 await _db.SaveChangesAsync(ct);
                 await transaction.CommitAsync(ct);
             }
-            catch (Exception e)
+            catch
             {
                 _logger.LogCritical("Failed to delete job {jobId} on {vehicleId}",
                     jobKey.Name, reminder.VehicleId);

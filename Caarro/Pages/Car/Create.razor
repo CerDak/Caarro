@@ -10,7 +10,7 @@
     <MudCardHeader>
         <MudText Typo="Typo.h5">New Vehicle</MudText>
     </MudCardHeader>
-    <MudForm Model="_vehicle" @ref="_form" bind-IsValid="_success" bind-Errors="_errors">
+    <MudForm Model="@_vehicle" @ref="_form" bind-Errors="@_errors">
         <MudCardContent>
             <MudTextField T="string" Label="Name" Required InputType="InputType.Text" @bind-Value="_vehicle.Name"/>
             <MudTextField T="string?" Label="Manufacturer" InputType="InputType.Text" @bind-Value="_vehicle.Manufacturer"/>
@@ -41,8 +41,7 @@
 
 @code {
     Vehicle _vehicle = new();
-
-    bool _success;
+    
     string[] _errors = { };
     MudForm _form = default!;
 
