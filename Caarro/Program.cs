@@ -9,8 +9,6 @@ using Microsoft.Identity.Web.UI;
 
 using MudBlazor.Services;
 
-using OpenTelemetry.Metrics;
-
 using Prometheus;
 
 using Quartz;
@@ -27,11 +25,6 @@ builder.Services.AddAuthorization(options =>
     // By default, all incoming requests will be authorized according to the default policy
     options.FallbackPolicy = options.DefaultPolicy;
 });
-
-builder.Services.AddOpenTelemetry()
-    .WithMetrics(m => m
-        .AddAspNetCoreInstrumentation()
-        .AddPrometheusExporter());
 
 builder.Services.AddHealthChecks()
     .AddSqlite(builder.Configuration.GetConnectionString("Sqlite")!);
