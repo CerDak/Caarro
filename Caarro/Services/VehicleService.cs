@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-
-using Caarro.Data;
+﻿using Caarro.Data;
 
 using Microsoft.EntityFrameworkCore;
 

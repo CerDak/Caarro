@@ -7,7 +7,12 @@
         <UserSecretsId>aspnet-Caarro-448C9957-2806-499F-A754-2B80B0B046EE</UserSecretsId>
         <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
     </PropertyGroup>
+
+    <ItemGroup>
+        <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.Sqlite" Version="6.0.2" />
